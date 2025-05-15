@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.subtrackr"
-    compileSdk = 33
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.subtrackr"
