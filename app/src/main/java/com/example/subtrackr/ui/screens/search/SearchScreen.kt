@@ -3,10 +3,13 @@ package com.example.subtrackr.ui.screens.search
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.subtrackr.R
@@ -44,11 +48,11 @@ fun SearchScreen() {
             .fillMaxWidth()
             .background(color = Color(0xFFfffcd6))
             .border(width = 2.dp, color = Color(0xFF689383), shape = RoundedCornerShape(10.dp))
-            .padding(horizontal =  12.dp),
+            .padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically
     ) {
         Image(painter = painterResource(id = R.drawable.search_green_icon),
-            contentDescription = "App Icon", modifier = Modifier.size(30.dp))
+            contentDescription = "Search Icon", modifier = Modifier.size(30.dp))
 
         TextField(
             value = searchText,
@@ -65,5 +69,16 @@ fun SearchScreen() {
             placeholder = { Text("Search for records", style = TextStyle(fontSize = 20.sp), color = Color(0xFF9c9778), fontWeight = FontWeight.Medium) },
         )
     }
+
+    Column (
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Image(painter = painterResource(id = R.drawable.notes_icon),
+            contentDescription = "Searching Notes Icon", modifier = Modifier.size(70.dp))
+        Spacer(modifier = Modifier.height(20.dp))
+        Text("Search records by notes, category name and account name", style = TextStyle(fontSize = 18.sp), color = Color(0xFF689383), fontWeight = FontWeight.Medium, textAlign = TextAlign.Center)
     }
+}
 }
