@@ -44,7 +44,6 @@ fun SearchScreen() {
             .fillMaxSize()
             .padding(20.dp),
     ) {
-
     Row (
         modifier = Modifier
             .fillMaxWidth()
@@ -96,6 +95,5 @@ fun SearchScreen() {
             Text("Search records by notes, category name and account name", style = TextStyle(fontSize = 18.sp), color = Color(0xFF689383), fontWeight = FontWeight.Medium, textAlign = TextAlign.Center)
         }
     }
-
 }
 }
