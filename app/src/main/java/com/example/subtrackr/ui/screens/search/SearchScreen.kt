@@ -37,6 +37,8 @@ import com.example.subtrackr.R
 @Composable
 fun SearchScreen() {
     var searchText by remember { mutableStateOf("") }
+    val foundResult by remember { mutableStateOf(true) }
+    val searchRecords by remember { mutableStateOf(true) }
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -70,15 +72,30 @@ fun SearchScreen() {
         )
     }
 
-    Column (
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize()
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 15.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(painter = painterResource(id = R.drawable.notes_icon),
-            contentDescription = "Searching Notes Icon", modifier = Modifier.size(70.dp))
-        Spacer(modifier = Modifier.height(20.dp))
-        Text("Search records by notes, category name and account name", style = TextStyle(fontSize = 18.sp), color = Color(0xFF689383), fontWeight = FontWeight.Medium, textAlign = TextAlign.Center)
+        Text(
+            text = if (foundResult) "Total 3 matches found" else "No matches found",
+            style = TextStyle(fontSize = 18.sp),
+            color = Color(0xFF689383),
+            fontWeight = FontWeight.Medium,
+        )
     }
+
+    if (!searchRecords) {
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Image(painter = painterResource(id = R.drawable.notes_icon),
+                contentDescription = "Searching Notes Icon", modifier = Modifier.size(70.dp))
+            Spacer(modifier = Modifier.height(20.dp))
+            Text("Search records by notes, category name and account name", style = TextStyle(fontSize = 18.sp), color = Color(0xFF689383), fontWeight = FontWeight.Medium, textAlign = TextAlign.Center)
+        }
+    }
+
 }
 }
