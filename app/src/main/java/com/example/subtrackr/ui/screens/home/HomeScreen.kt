@@ -3,11 +3,13 @@ package com.example.subtrackr.ui.screens.home
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -38,7 +41,8 @@ import com.example.subtrackr.R
 
 @Composable
 fun HomeScreen() {
-    var showDialog by remember { mutableStateOf(false) }
+    var deleteDialog by remember { mutableStateOf(false) }
+    var detailsDialog by remember { mutableStateOf(true) }
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -140,15 +144,21 @@ fun HomeScreen() {
             }
         }
     }
-    if (showDialog) {
-        dialogView(
-            dismiss = { showDialog = false },
+    if (deleteDialog) {
+        deleteDialogView(
+            dismiss = { deleteDialog = false },
+        )
+    }
+
+    if (detailsDialog) {
+        detailsDialogView(
+            dismiss = { detailsDialog = false },
         )
     }
 }
 
 @Composable
-fun dialogView(dismiss: () -> Unit) {
+fun deleteDialogView(dismiss: () -> Unit) {
     Dialog(onDismissRequest = { dismiss() }) {
         Column(
             modifier = Modifier
@@ -194,6 +204,140 @@ fun dialogView(dismiss: () -> Unit) {
                 ) {
                     Text("YES", style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Medium)
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun detailsDialogView(dismiss: () -> Unit) {
+    Dialog(onDismissRequest = { dismiss() }) {
+        Column(
+            modifier = Modifier
+                .background(color = Color(0xFFc62827), shape = RoundedCornerShape(10.dp))
+                .width(320.dp)
+                .wrapContentHeight(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Column (
+                modifier = Modifier.padding(top = 20.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
+            ) {
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 30.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Image(painter = painterResource(id = R.drawable.cross_icon),
+                    contentDescription = "Menu Icon")
+
+                Row {
+                    Image(painter = painterResource(id = R.drawable.delete_icon),
+                        contentDescription = "Menu Icon")
+
+                    Spacer(modifier = Modifier.padding(start = 20.dp))
+                    Image(painter = painterResource(id = R.drawable.edit_icon),
+                        contentDescription = "Menu Icon")
+                }
+            }
+
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    "EXPENSE",
+                    style = TextStyle(fontSize = 18.sp),
+                    color = Color.White,
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    "-$1,100.00",
+                    style = TextStyle(fontSize = 30.sp),
+                    color = Color.White,
+                )
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Text(
+                "Jun 21, 2025 9:35 AM",
+                style = TextStyle(fontSize = 14.sp),
+                color = Color.White,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Right
+            )
+            }
+
+            Column (
+                modifier = Modifier
+                    .background(color = Color(0xFFfffde8))
+                    .fillMaxWidth()
+                    .padding(top = 10.dp, bottom = 30.dp, start = 20.dp, end = 20.dp)
+            ) {
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        "Account",
+                        style = TextStyle(fontSize = 20.sp),
+                        color = Color(0xFF15433e),
+                    )
+
+                    Spacer(modifier = Modifier.padding(start = 10.dp))
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .border(
+                                width = 2.dp,
+                                color = Color(0xFF689383),
+                                shape = RoundedCornerShape(6.dp)
+                            )
+                            .padding(vertical = 10.dp, horizontal = 12.dp)
+                    ) {
+                        Image(painter = painterResource(id = R.drawable.card_icon),
+                            contentDescription = "Card Icon", modifier = Modifier.size(35.dp))
+                        Spacer(modifier = Modifier.padding(start = 5.dp))
+                        Text("Card", style = TextStyle(fontSize = 18.sp), color = Color(0xFF15433e))
+                    }
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        "Category",
+                        style = TextStyle(fontSize = 20.sp),
+                        color = Color(0xFF15433e),
+                    )
+
+                    Spacer(modifier = Modifier.padding(start = 10.dp))
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .border(
+                                width = 2.dp,
+                                color = Color(0xFF689383),
+                                shape = RoundedCornerShape(6.dp)
+                            )
+                            .padding(vertical = 10.dp, horizontal = 12.dp)
+                    ) {
+                        Image(painter = painterResource(id = R.drawable.bills_icon),
+                            contentDescription = "Card Icon", modifier = Modifier.size(35.dp))
+                        Spacer(modifier = Modifier.padding(start = 5.dp))
+                        Text("Bills", style = TextStyle(fontSize = 18.sp), color = Color(0xFF15433e))
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+                Text(
+                    "Electricity Bill",
+                    style = TextStyle(fontSize = 20.sp),
+                    color = Color(0xFF15433e),
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
