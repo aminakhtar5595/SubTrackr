@@ -42,7 +42,7 @@ import com.example.subtrackr.R
 @Composable
 fun HomeScreen() {
     var deleteDialog by remember { mutableStateOf(false) }
-    var detailsDialog by remember { mutableStateOf(true) }
+    var detailsDialog by remember { mutableStateOf(false) }
     Column (
         modifier = Modifier
             .fillMaxSize()
