@@ -5,15 +5,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -39,6 +44,7 @@ import com.example.subtrackr.R
 @Composable
 fun ExpenseScreen() {
     var notesText by remember { mutableStateOf("") }
+    var amountText by remember { mutableStateOf("0") }
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -152,5 +158,30 @@ fun ExpenseScreen() {
                 .background(color = Color(0xFFfffcd6))
                 .height(150.dp)
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 2.dp,
+                    color = Color(0xFF689383),
+                    shape = RoundedCornerShape(10.dp)
+                )
+                .padding(horizontal = 10.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(amountText, style = TextStyle(fontSize = 50.sp), color = Color(0xFF084c3c), fontWeight = FontWeight.Medium)
+                Spacer(modifier = Modifier.padding(start = 8.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.search_green_icon),
+                    contentDescription = "Search Icon",
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        }
+
     }
 }
