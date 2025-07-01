@@ -7,14 +7,23 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,13 +35,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.subtrackr.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpenseScreen() {
+    var notesText by remember { mutableStateOf("") }
     Column (
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color(0xFFfffde8))
-            .padding(20.dp),
+            .padding(vertical = 20.dp, horizontal = 10.dp),
     ) {
         Row (
             modifier = Modifier.fillMaxWidth(),
@@ -116,5 +127,30 @@ fun ExpenseScreen() {
                 }
             }
         }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        TextField(
+            value = notesText,
+            onValueChange = { notesText = it },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.Transparent,
+                textColor = Color.Gray,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                placeholderColor = Color.LightGray
+            ),
+            textStyle = TextStyle(
+                fontSize = 20.sp, color = Color(0xFF689383), fontWeight = FontWeight.SemiBold),
+            placeholder = { Text("Add notes", style = TextStyle(fontSize = 20.sp), color = Color(0xFF9c9778), fontWeight = FontWeight.Medium) },
+            modifier = Modifier.border(
+                width = 2.dp,
+                color = Color(0xFF689383),
+                shape = RoundedCornerShape(6.dp)
+            )
+                .fillMaxWidth()
+                .background(color = Color(0xFFfffcd6))
+                .height(150.dp)
+        )
     }
 }
