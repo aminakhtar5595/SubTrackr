@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
@@ -77,7 +78,7 @@ fun ExpenseScreen() {
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 30.dp, bottom = 20.dp),
+                .padding(vertical = 20.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Bottom
         ) {
@@ -149,14 +150,15 @@ fun ExpenseScreen() {
             textStyle = TextStyle(
                 fontSize = 20.sp, color = Color(0xFF689383), fontWeight = FontWeight.SemiBold),
             placeholder = { Text("Add notes", style = TextStyle(fontSize = 20.sp), color = Color(0xFF9c9778), fontWeight = FontWeight.Medium) },
-            modifier = Modifier.border(
-                width = 2.dp,
-                color = Color(0xFF689383),
-                shape = RoundedCornerShape(6.dp)
-            )
+            modifier = Modifier
+                .border(
+                    width = 2.dp,
+                    color = Color(0xFF689383),
+                    shape = RoundedCornerShape(6.dp)
+                )
                 .fillMaxWidth()
                 .background(color = Color(0xFFfffcd6))
-                .height(150.dp)
+                .height(100.dp)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -182,6 +184,202 @@ fun ExpenseScreen() {
                 )
             }
         }
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(60.dp)
+                    .background(color = Color(0xFF689383), shape = RoundedCornerShape(8.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "+",
+                    style = TextStyle(fontSize = 25.sp),
+                    color = Color.White,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center
+                )
+            }
 
+            listOf("7", "8", "9").forEach { text ->
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(60.dp)
+                        .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+                        .border(
+                            width = 2.dp,
+                            color = Color(0xFF689383),
+                            shape = RoundedCornerShape(8.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text,
+                        style = TextStyle(fontSize = 25.sp),
+                        color = Color(0xFF689383),
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(60.dp)
+                    .background(color = Color(0xFF689383), shape = RoundedCornerShape(8.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "-",
+                    style = TextStyle(fontSize = 25.sp),
+                    color = Color.White,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            listOf("4", "5", "6").forEach { text ->
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(60.dp)
+                        .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+                        .border(
+                            width = 2.dp,
+                            color = Color(0xFF689383),
+                            shape = RoundedCornerShape(8.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text,
+                        style = TextStyle(fontSize = 25.sp),
+                        color = Color(0xFF689383),
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(60.dp)
+                    .background(color = Color(0xFF689383), shape = RoundedCornerShape(8.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "x",
+                    style = TextStyle(fontSize = 25.sp),
+                    color = Color.White,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            listOf("1", "2", "3").forEach { text ->
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(60.dp)
+                        .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+                        .border(
+                            width = 2.dp,
+                            color = Color(0xFF689383),
+                            shape = RoundedCornerShape(8.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text,
+                        style = TextStyle(fontSize = 25.sp),
+                        color = Color(0xFF689383),
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(60.dp)
+                    .background(color = Color(0xFF689383), shape = RoundedCornerShape(8.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "/",
+                    style = TextStyle(fontSize = 25.sp),
+                    color = Color.White,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            listOf("0", ".").forEach { text ->
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(60.dp)
+                        .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+                        .border(
+                            width = 2.dp,
+                            color = Color(0xFF689383),
+                            shape = RoundedCornerShape(8.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text,
+                        style = TextStyle(fontSize = 25.sp),
+                        color = Color(0xFF689383),
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(60.dp)
+                    .background(color = Color(0xFF689383), shape = RoundedCornerShape(8.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "=",
+                    style = TextStyle(fontSize = 25.sp),
+                    color = Color.White,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
     }
 }
