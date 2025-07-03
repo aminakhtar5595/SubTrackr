@@ -74,8 +74,8 @@ fun ExpenseScreen() {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Bottom
         ) {
-            Image(painter = painterResource(id = R.drawable.save_icon),
-                contentDescription = "Cancel Icon", modifier = Modifier.size(24.dp))
+            Image(painter = painterResource(id = R.drawable.expense_tick),
+                contentDescription = "Expense Icon", modifier = Modifier.size(24.dp))
             Spacer(modifier = Modifier.padding(start = 8.dp))
             Text("EXPENSE", style = TextStyle(fontSize = 20.sp), color = Color(0xFF679384), fontWeight = FontWeight.Bold)
         }
