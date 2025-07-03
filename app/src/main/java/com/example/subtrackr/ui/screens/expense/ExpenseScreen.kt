@@ -103,8 +103,8 @@ fun ExpenseScreen() {
                         .padding(horizontal = 12.dp),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Image(painter = painterResource(id = R.drawable.save_icon),
-                        contentDescription = "Cancel Icon", modifier = Modifier.size(24.dp))
+                    Image(painter = painterResource(id = R.drawable.expense_account),
+                        contentDescription = "Expense Account", modifier = Modifier.size(35.dp))
                     Spacer(modifier = Modifier.padding(start = 8.dp))
                     Text("Account", style = TextStyle(fontSize = 20.sp), color = Color(0xFF679384), fontWeight = FontWeight.Medium)
                 }
