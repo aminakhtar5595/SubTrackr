@@ -173,16 +173,16 @@ fun ExpenseScreen() {
                     color = Color(0xFF689383),
                     shape = RoundedCornerShape(10.dp)
                 )
-                .padding(horizontal = 10.dp),
+                .padding(horizontal = 20.dp),
             horizontalArrangement = Arrangement.End
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(amountText, style = TextStyle(fontSize = 50.sp), color = Color(0xFF084c3c), fontWeight = FontWeight.Medium)
-                Spacer(modifier = Modifier.padding(start = 8.dp))
+                Spacer(modifier = Modifier.padding(start = 15.dp))
                 Image(
-                    painter = painterResource(id = R.drawable.search_green_icon),
-                    contentDescription = "Search Icon",
-                    modifier = Modifier.size(20.dp)
+                    painter = painterResource(id = R.drawable.expense_cancel),
+                    contentDescription = "Cancel Icon",
+                    modifier = Modifier.size(30.dp)
                 )
             }
         }
