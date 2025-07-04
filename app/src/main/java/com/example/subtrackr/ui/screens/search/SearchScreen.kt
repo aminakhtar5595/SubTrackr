@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -31,11 +32,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.subtrackr.R
+import com.example.subtrackr.ui.theme.BorderGreen
+import com.example.subtrackr.ui.theme.LightBackground
+import com.example.subtrackr.ui.theme.PlaceholderGray
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen() {
+fun SearchScreen(navController: NavController) {
     var searchText by remember { mutableStateOf("") }
     val foundResult by remember { mutableStateOf(true) }
     val searchRecords by remember { mutableStateOf(true) }
@@ -47,8 +52,8 @@ fun SearchScreen() {
     Row (
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color(0xFFfffcd6))
-            .border(width = 2.dp, color = Color(0xFF689383), shape = RoundedCornerShape(10.dp))
+            .background(color = LightBackground)
+            .border(width = 2.dp, color = BorderGreen, shape = RoundedCornerShape(10.dp))
             .padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically
     ) {
@@ -66,8 +71,10 @@ fun SearchScreen() {
                 placeholderColor = Color.LightGray
             ),
             textStyle = TextStyle(
-                fontSize = 20.sp, color = Color(0xFF689383), fontWeight = FontWeight.SemiBold),
-            placeholder = { Text("Search for records", style = TextStyle(fontSize = 20.sp), color = Color(0xFF9c9778), fontWeight = FontWeight.Medium) },
+                fontSize = 20.sp, color = BorderGreen, fontWeight = FontWeight.SemiBold),
+            placeholder = { Text("Search for records",
+                style = MaterialTheme.typography.titleLarge.copy(color = PlaceholderGray, fontSize = 20.sp)
+            ) }
         )
     }
 
@@ -75,12 +82,7 @@ fun SearchScreen() {
         modifier = Modifier.fillMaxWidth().padding(vertical = 15.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = if (foundResult) "Total 3 matches found" else "No matches found",
-            style = TextStyle(fontSize = 18.sp),
-            color = Color(0xFF689383),
-            fontWeight = FontWeight.Medium,
-        )
+        Text(if (foundResult) "Total 3 matches found" else "No matches found",style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500))
     }
 
     if (!searchRecords) {
@@ -92,7 +94,7 @@ fun SearchScreen() {
             Image(painter = painterResource(id = R.drawable.notes_icon),
                 contentDescription = "Searching Notes Icon", modifier = Modifier.size(70.dp))
             Spacer(modifier = Modifier.height(20.dp))
-            Text("Search records by notes, category name and account name", style = TextStyle(fontSize = 18.sp), color = Color(0xFF689383), fontWeight = FontWeight.Medium, textAlign = TextAlign.Center)
+            Text("Search records by notes, category name and account name",style = MaterialTheme.typography.titleMedium.copy(color = BorderGreen, fontSize = 18.sp, textAlign = TextAlign.Center))
         }
     }
 }
