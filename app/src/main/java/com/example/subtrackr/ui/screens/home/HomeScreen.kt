@@ -43,7 +43,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.subtrackr.R
 import com.example.subtrackr.ui.theme.BackgroundRed
-import com.example.subtrackr.ui.theme.BorderGreen
 import com.example.subtrackr.ui.theme.LightBackground
 import com.example.subtrackr.ui.theme.LightGray
 import com.example.subtrackr.ui.theme.LightGreen
@@ -80,7 +79,7 @@ fun HomeScreen(navController: NavController) {
                     modifier = Modifier.size(30.dp)
                 )
 
-                Spacer(modifier = Modifier.padding(start = 30.dp))
+                Spacer(modifier = Modifier.width(30.dp))
                 Image(painter = painterResource(id = R.drawable.app_icon), contentDescription = "App Icon", modifier = Modifier.height(25.dp))
             }
 
@@ -100,7 +99,7 @@ fun HomeScreen(navController: NavController) {
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(8.dp))
             Image(painter = painterResource(id = R.drawable.left_arrow_icon), contentDescription = "Left Arrow Icon")
             Text("June, 2025",style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontSize = 20.sp, fontWeight = FontWeight.W500))
             Image(painter = painterResource(id = R.drawable.right_arrow_icon), contentDescription = "Right Arrow Icon")
@@ -146,8 +145,7 @@ fun HomeScreen(navController: NavController) {
                         ) {
                             Image(painter = painterResource(id = R.drawable.cash_icon),
                                 contentDescription = "Cash Icon", modifier = Modifier.size(30.dp))
-                            Spacer(modifier = Modifier.padding(start = 5.dp))
-                            Text("Cash",style = MaterialTheme.typography.titleMedium.copy(color = LightGreen))
+                            Text("Cash",style = MaterialTheme.typography.titleMedium.copy(color = LightGreen), modifier = Modifier.padding(start = 5.dp))
                         }
                     }
                 }
@@ -247,7 +245,7 @@ fun detailsDialogView(dismiss: () -> Unit) {
                     Image(painter = painterResource(id = R.drawable.delete_icon),
                         contentDescription = "Delete Icon")
 
-                    Spacer(modifier = Modifier.padding(start = 20.dp))
+                    Spacer(modifier = Modifier.width(20.dp))
                     Image(painter = painterResource(id = R.drawable.edit_icon),
                         contentDescription = "Edit Icon")
                 }
@@ -273,55 +271,31 @@ fun detailsDialogView(dismiss: () -> Unit) {
                     .fillMaxWidth()
                     .padding(top = 10.dp, bottom = 30.dp, start = 20.dp, end = 20.dp)
             ) {
-                Row (
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text("Account",style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500))
 
-                    Spacer(modifier = Modifier.padding(start = 15.dp))
-                    Row (
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .border(
-                                width = 2.dp,
-                                color = BorderGreen,
-                                shape = RoundedCornerShape(6.dp)
-                            )
-                            .padding(vertical = 10.dp, horizontal = 12.dp)
-                    ) {
-                        Image(painter = painterResource(id = R.drawable.card_icon),
-                            contentDescription = "Card Icon", modifier = Modifier.size(35.dp))
-                        Spacer(modifier = Modifier.padding(start = 5.dp))
-                        Text("Card",style = MaterialTheme.typography.bodyLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 18.sp))
-                    }
-                }
+                InfoTag(title = "Account", icon = R.drawable.card_icon, label = "Card")
                 Spacer(modifier = Modifier.height(10.dp))
-                Row (
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text("Category",style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500))
-
-                    Spacer(modifier = Modifier.padding(start = 15.dp))
-                    Row (
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .border(
-                                width = 2.dp,
-                                color = BorderGreen,
-                                shape = RoundedCornerShape(6.dp)
-                            )
-                            .padding(vertical = 10.dp, horizontal = 12.dp)
-                    ) {
-                        Image(painter = painterResource(id = R.drawable.bills_icon),
-                            contentDescription = "Card Icon", modifier = Modifier.size(35.dp))
-                        Spacer(modifier = Modifier.padding(start = 5.dp))
-                        Text("Bills",style = MaterialTheme.typography.bodyLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 18.sp))
-                    }
-                }
-
+                InfoTag(title = "Category", icon = R.drawable.bills_icon, label = "Bills")
                 Spacer(modifier = Modifier.height(20.dp))
                 Text("Electricity Bill",style = MaterialTheme.typography.titleLarge.copy(color = LightGreen, textAlign = TextAlign.Center), modifier = Modifier.fillMaxWidth())
             }
+        }
+    }
+}
+
+@Composable
+fun InfoTag(title: String, icon: Int, label: String) {
+    Row (
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(title,style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500), modifier = Modifier.padding(end = 15.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .border(2.dp, Color(0xFF689383), RoundedCornerShape(6.dp))
+                .padding(vertical = 10.dp, horizontal = 12.dp)
+        ) {
+            Image(painter = painterResource(icon), contentDescription = label, modifier = Modifier.size(35.dp))
+            Text(label, style = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF15433e), fontWeight = FontWeight.W500, fontSize = 18.sp), modifier = Modifier.padding(start = 5.dp))
         }
     }
 }
