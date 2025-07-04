@@ -43,6 +43,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.subtrackr.R
 import com.example.subtrackr.ui.theme.BackgroundRed
+import com.example.subtrackr.ui.theme.BorderGreen
 import com.example.subtrackr.ui.theme.LightBackground
 import com.example.subtrackr.ui.theme.LightGray
 import com.example.subtrackr.ui.theme.LightGreen
@@ -291,11 +292,11 @@ fun InfoTag(title: String, icon: Int, label: String) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .border(2.dp, Color(0xFF689383), RoundedCornerShape(6.dp))
+                .border(2.dp, color = BorderGreen, RoundedCornerShape(6.dp))
                 .padding(vertical = 10.dp, horizontal = 12.dp)
         ) {
             Image(painter = painterResource(icon), contentDescription = label, modifier = Modifier.size(35.dp))
-            Text(label, style = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF15433e), fontWeight = FontWeight.W500, fontSize = 18.sp), modifier = Modifier.padding(start = 5.dp))
+            Text(label, style = MaterialTheme.typography.bodyLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 18.sp), modifier = Modifier.padding(start = 5.dp))
         }
     }
 }
