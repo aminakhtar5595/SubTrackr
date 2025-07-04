@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,9 +17,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,10 +42,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.navigation.NavController
 import com.example.subtrackr.R
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     var deleteDialog by remember { mutableStateOf(false) }
     var detailsDialog by remember { mutableStateOf(false) }
     Column (
@@ -52,21 +58,32 @@ fun HomeScreen() {
         Column (
             modifier = Modifier.padding(horizontal = 20.dp)
         ) {
+
+        // First section
         Row (
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Row {
-                Image(painter = painterResource(id = R.drawable.menu_icon),
-                    contentDescription = "Menu Icon")
+            Row (
+                verticalAlignment = Alignment.Bottom,
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Menu,
+                    contentDescription = "Menu Icon",
+                    modifier = Modifier.size(30.dp)
+                )
 
-                Spacer(modifier = Modifier.padding(end = 30.dp))
+                Spacer(modifier = Modifier.padding(start = 30.dp))
                 Image(painter = painterResource(id = R.drawable.app_icon),
-                    contentDescription = "App Icon", modifier = Modifier.height(27.dp))
+                    contentDescription = "App Icon", modifier = Modifier.height(25.dp))
             }
-            Image(painter = painterResource(id = R.drawable.search_icon),
-                contentDescription = "Search Icon", modifier = Modifier.size(30.dp))
+
+            Icon(
+                imageVector = Icons.Filled.Search,
+                contentDescription = "Search Icon",
+                modifier = Modifier.size(30.dp),
+                tint = Color(0xFF15433e)
+            )
         }
 
         Row (
@@ -77,8 +94,9 @@ fun HomeScreen() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Spacer(modifier = Modifier.padding())
+
             Image(painter = painterResource(id = R.drawable.left_arrow_icon),
-                contentDescription = "Right Arrow Icon")
+                contentDescription = "Left Arrow Icon")
 
             Text("June, 2025", style = TextStyle(fontSize = 18.sp), color = Color(0xFF15433e), fontWeight = FontWeight.Medium)
 
