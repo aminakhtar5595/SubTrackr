@@ -18,14 +18,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -55,11 +53,13 @@ fun HomeScreen(navController: NavController) {
             .background(color = Color(0xFFfffde8))
             .padding(vertical = 20.dp),
     ) {
+
+        // First main section
         Column (
             modifier = Modifier.padding(horizontal = 20.dp)
         ) {
 
-        // First section
+        // First section - Header
         Row (
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -74,8 +74,7 @@ fun HomeScreen(navController: NavController) {
                 )
 
                 Spacer(modifier = Modifier.padding(start = 30.dp))
-                Image(painter = painterResource(id = R.drawable.app_icon),
-                    contentDescription = "App Icon", modifier = Modifier.height(25.dp))
+                Image(painter = painterResource(id = R.drawable.app_icon), contentDescription = "App Icon", modifier = Modifier.height(25.dp))
             }
 
             Icon(
@@ -86,6 +85,7 @@ fun HomeScreen(navController: NavController) {
             )
         }
 
+        // Second section - Date
         Row (
             modifier = Modifier
                 .fillMaxWidth()
@@ -94,45 +94,30 @@ fun HomeScreen(navController: NavController) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Spacer(modifier = Modifier.padding())
-
-            Image(painter = painterResource(id = R.drawable.left_arrow_icon),
-                contentDescription = "Left Arrow Icon")
-
-            Text("June, 2025", style = TextStyle(fontSize = 18.sp), color = Color(0xFF15433e), fontWeight = FontWeight.Medium)
-
-            Image(painter = painterResource(id = R.drawable.right_arrow_icon),
-                contentDescription = "Right Arrow Icon")
-
-            Image(painter = painterResource(id = R.drawable.filter_icon),
-                contentDescription = "Filter Icon")
+            Image(painter = painterResource(id = R.drawable.left_arrow_icon), contentDescription = "Left Arrow Icon")
+            Text("June, 2025",style = MaterialTheme.typography.titleLarge.copy(color = Color(0xFF15433e), fontSize = 20.sp, fontWeight = FontWeight.W500))
+            Image(painter = painterResource(id = R.drawable.right_arrow_icon), contentDescription = "Right Arrow Icon")
+            Image(painter = painterResource(id = R.drawable.filter_icon), contentDescription = "Filter Icon")
         }
 
+        // Third section - Expense amount
         Column (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("EXPENSE", style = TextStyle(fontSize = 16.sp), color = Color(0xFF15433e), fontWeight = FontWeight.Medium)
-            Text("$5,910.00", style = TextStyle(fontSize = 16.sp), color = Color(0xFFa94943), fontWeight = FontWeight.Medium)
+            Text("EXPENSE",style = MaterialTheme.typography.titleMedium.copy(color = Color(0xFF15433e)))
+            Text("$5,910.00",style = MaterialTheme.typography.titleMedium.copy(color = Color(0xFFa94943)))
         }
         }
 
-        Divider(
-            color = Color(0xFFf3f0dd),
-            thickness = 3.dp
-        )
+        Divider(color = Color(0xFFf3f0dd), thickness = 3.dp)
 
         Column (
             modifier = Modifier.padding(20.dp)
         ) {
-            Text("Jun 21, Saturday", style = TextStyle(fontSize = 18.sp), color = Color(0xFF15433e), fontWeight = FontWeight.Medium)
-
+            Text("Jun 21, Saturday",style = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF15433e), fontWeight = FontWeight.W500))
             Spacer(modifier = Modifier.height(10.dp))
-            Divider(
-                color = Color(0xFF15433e),
-                thickness = 1.dp
-            )
+            Divider(color = Color(0xFF15433e), thickness = 1.dp)
             Spacer(modifier = Modifier.height(10.dp))
 
             Row (
@@ -147,18 +132,19 @@ fun HomeScreen(navController: NavController) {
                     Column (
                         modifier = Modifier.padding(start = 10.dp)
                     ) {
-                        Text("Telephone", style = TextStyle(fontSize = 18.sp), color = Color(0xFF15433e), fontWeight = FontWeight.Medium)
+                        Text("Telephone",style = MaterialTheme.typography.titleSmall.copy(color = Color(0xFF15433e), fontWeight = FontWeight.W500, fontSize = 20.sp))
                         Spacer(modifier = Modifier.height(5.dp))
                         Row (
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Image(painter = painterResource(id = R.drawable.cash_icon),
                                 contentDescription = "Cash Icon", modifier = Modifier.size(30.dp))
-                            Text("Cash", style = TextStyle(fontSize = 16.sp), color = Color(0xFF15433e), fontWeight = FontWeight.Medium, modifier = Modifier.padding(start = 5.dp))
+                            Spacer(modifier = Modifier.padding(start = 5.dp))
+                            Text("Cash",style = MaterialTheme.typography.titleMedium.copy(color = Color(0xFF7e9a87)))
                         }
                     }
                 }
-                Text("$5,910.00", style = TextStyle(fontSize = 18.sp), color = Color(0xFFa94943), fontWeight = FontWeight.SemiBold)
+                Text("-$5,910.00",style = MaterialTheme.typography.titleMedium.copy(color = Color(0xFFa94943), fontWeight = FontWeight.W500, fontSize = 20.sp))
             }
         }
     }
@@ -188,16 +174,12 @@ fun deleteDialogView(dismiss: () -> Unit) {
         ) {
             Text(
                 "Delete this record?",
-                style = TextStyle(fontSize = 20.sp),
-                color = Color(0xFF15433e),
-                fontWeight = FontWeight.SemiBold
+                style = MaterialTheme.typography.headlineSmall.copy(color = Color(0xFF15433e), fontWeight = FontWeight.W500)
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 "Are you sure?",
-                style = TextStyle(fontSize = 18.sp),
-                color = Color(0xFF15433e),
-                fontWeight = FontWeight.Medium
+                style = MaterialTheme.typography.titleLarge.copy(color = Color(0xFF15433e), fontWeight = FontWeight.W400)
             )
             Spacer(modifier = Modifier.height(24.dp))
             Row(
@@ -210,7 +192,9 @@ fun deleteDialogView(dismiss: () -> Unit) {
                     border = BorderStroke(2.dp, Color(0xFF15433e)),
                     colors = ButtonDefaults.buttonColors(contentColor = Color(0xFF15433e), containerColor = Color.Transparent),
                 ) {
-                    Text("NO", style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Medium)
+                    Text("NO",
+                        style = MaterialTheme.typography.titleSmall.copy(color = Color(0xFF15433e), fontWeight = FontWeight.W500, fontSize = 20.sp)
+                    )
                 }
 
                 Button(
@@ -220,7 +204,9 @@ fun deleteDialogView(dismiss: () -> Unit) {
                     border = BorderStroke(2.dp, Color(0xFF15433e)),
                     colors = ButtonDefaults.buttonColors(contentColor = Color(0xFF15433e), containerColor = Color.Transparent),
                 ) {
-                    Text("YES", style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Medium)
+                    Text("YES",
+                        style = MaterialTheme.typography.titleSmall.copy(color = Color(0xFF15433e), fontWeight = FontWeight.W500, fontSize = 20.sp)
+                    )
                 }
             }
         }
@@ -248,15 +234,15 @@ fun detailsDialogView(dismiss: () -> Unit) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Image(painter = painterResource(id = R.drawable.cross_icon),
-                    contentDescription = "Menu Icon")
+                    contentDescription = "Cross Icon")
 
                 Row {
                     Image(painter = painterResource(id = R.drawable.delete_icon),
-                        contentDescription = "Menu Icon")
+                        contentDescription = "Delete Icon")
 
                     Spacer(modifier = Modifier.padding(start = 20.dp))
                     Image(painter = painterResource(id = R.drawable.edit_icon),
-                        contentDescription = "Menu Icon")
+                        contentDescription = "Edit Icon")
                 }
             }
 
@@ -264,28 +250,14 @@ fun detailsDialogView(dismiss: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(
-                    "EXPENSE",
-                    style = TextStyle(fontSize = 18.sp),
-                    color = Color.White,
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    "-$1,100.00",
-                    style = TextStyle(fontSize = 30.sp),
-                    color = Color.White,
-                )
+
+                Text("EXPENSE",style = MaterialTheme.typography.titleLarge.copy(color = Color.White, fontSize = 18.sp))
+                Spacer(modifier = Modifier.height(15.dp))
+                Text("-$1,100.00",style = MaterialTheme.typography.headlineLarge.copy(color = Color.White))
             }
 
             Spacer(modifier = Modifier.height(20.dp))
-
-            Text(
-                "Jun 21, 2025 9:35 AM",
-                style = TextStyle(fontSize = 14.sp),
-                color = Color.White,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Right
-            )
+            Text("Jun 21, 2025 9:35 AM",style = MaterialTheme.typography.bodyMedium.copy(color = Color.White, textAlign = TextAlign.Right), modifier = Modifier.fillMaxWidth())
             }
 
             Column (
@@ -297,13 +269,9 @@ fun detailsDialogView(dismiss: () -> Unit) {
                 Row (
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(
-                        "Account",
-                        style = TextStyle(fontSize = 20.sp),
-                        color = Color(0xFF15433e),
-                    )
+                    Text("Account",style = MaterialTheme.typography.titleLarge.copy(color = Color(0xFF15433e), fontWeight = FontWeight.W500))
 
-                    Spacer(modifier = Modifier.padding(start = 10.dp))
+                    Spacer(modifier = Modifier.padding(start = 15.dp))
                     Row (
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
@@ -317,20 +285,16 @@ fun detailsDialogView(dismiss: () -> Unit) {
                         Image(painter = painterResource(id = R.drawable.card_icon),
                             contentDescription = "Card Icon", modifier = Modifier.size(35.dp))
                         Spacer(modifier = Modifier.padding(start = 5.dp))
-                        Text("Card", style = TextStyle(fontSize = 18.sp), color = Color(0xFF15433e))
+                        Text("Card",style = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF15433e), fontWeight = FontWeight.W500, fontSize = 18.sp))
                     }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 Row (
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(
-                        "Category",
-                        style = TextStyle(fontSize = 20.sp),
-                        color = Color(0xFF15433e),
-                    )
+                    Text("Category",style = MaterialTheme.typography.titleLarge.copy(color = Color(0xFF15433e), fontWeight = FontWeight.W500))
 
-                    Spacer(modifier = Modifier.padding(start = 10.dp))
+                    Spacer(modifier = Modifier.padding(start = 15.dp))
                     Row (
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
@@ -344,18 +308,12 @@ fun detailsDialogView(dismiss: () -> Unit) {
                         Image(painter = painterResource(id = R.drawable.bills_icon),
                             contentDescription = "Card Icon", modifier = Modifier.size(35.dp))
                         Spacer(modifier = Modifier.padding(start = 5.dp))
-                        Text("Bills", style = TextStyle(fontSize = 18.sp), color = Color(0xFF15433e))
+                        Text("Bills",style = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF15433e), fontWeight = FontWeight.W500, fontSize = 18.sp))
                     }
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
-                Text(
-                    "Electricity Bill",
-                    style = TextStyle(fontSize = 20.sp),
-                    color = Color(0xFF15433e),
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
+                Text("Electricity Bill",style = MaterialTheme.typography.titleLarge.copy(color = Color(0xFF7e9a87), textAlign = TextAlign.Center), modifier = Modifier.fillMaxWidth())
             }
         }
     }
