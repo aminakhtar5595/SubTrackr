@@ -18,8 +18,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
@@ -54,6 +56,7 @@ import com.example.subtrackr.ui.theme.PrimaryRed
 fun HomeScreen(navController: NavController) {
     var deleteDialog by remember { mutableStateOf(false) }
     var detailsDialog by remember { mutableStateOf(false) }
+    var optionsDialog by remember { mutableStateOf(false) }
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -109,7 +112,9 @@ fun HomeScreen(navController: NavController) {
 
         // Third section - Expense amount
         Column (
-            modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text("EXPENSE",style = MaterialTheme.typography.titleMedium.copy(color = PrimaryGreen))
@@ -163,6 +168,12 @@ fun HomeScreen(navController: NavController) {
     if (detailsDialog) {
         detailsDialogView(
             dismiss = { detailsDialog = false },
+        )
+    }
+
+    if (optionsDialog) {
+        optionsDialogView(
+            dismiss = { optionsDialog = false },
         )
     }
 }
@@ -297,6 +308,78 @@ fun InfoTag(title: String, icon: Int, label: String) {
         ) {
             Image(painter = painterResource(icon), contentDescription = label, modifier = Modifier.size(35.dp))
             Text(label, style = MaterialTheme.typography.bodyLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 18.sp), modifier = Modifier.padding(start = 5.dp))
+        }
+    }
+}
+
+@Composable
+fun optionsDialogView(dismiss: () -> Unit) {
+    Dialog(onDismissRequest = { dismiss() }) {
+        Column(
+            modifier = Modifier
+                .background(color = Color.White, shape = RoundedCornerShape(10.dp))
+                .padding(horizontal = 32.dp, vertical = 24.dp)
+                .width(320.dp)
+                .wrapContentHeight()
+        ) {
+            Text("Display options", style = MaterialTheme.typography.headlineSmall.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, textAlign = TextAlign.Center), modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.height(30.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Top
+            ) {
+                Text("View mode:", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontSize = 18.sp, fontWeight = FontWeight.W500), modifier = Modifier.weight(2f))
+
+                Column(verticalArrangement = Arrangement.spacedBy(15.dp), modifier = Modifier.weight(2f)) {
+                    Text("DAILY", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500))
+                    Text("WEEKLY", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500))
+                    Text("MONTHLY", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500))
+                    Text("3 MONTHS", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500))
+                    Text("6 MONTHS", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500))
+                    Text("YEARLY", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500))
+                }
+            }
+
+            Spacer(modifier = Modifier.height(30.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Top
+            ) {
+                Text("Show total:", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontSize = 18.sp, fontWeight = FontWeight.W500), modifier = Modifier.weight(2f))
+
+                Column(verticalArrangement = Arrangement.spacedBy(15.dp), modifier = Modifier.weight(2f)) {
+                    Text("YES", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500))
+                    Text("NO", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500))
+                }
+            }
+
+            Spacer(modifier = Modifier.height(30.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Top
+            ) {
+                Text("Carry over:", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontSize = 18.sp, fontWeight = FontWeight.W500), modifier = Modifier.weight(2f))
+
+                Column(verticalArrangement = Arrangement.spacedBy(15.dp), modifier = Modifier.weight(2f)) {
+                    Text("ON", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500))
+                    Text("OFF", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500))
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Info,
+                    contentDescription = "Menu Icon",
+                    modifier = Modifier.size(30.dp),
+                    tint = BorderGreen,
+                )
+
+                Text("With Carry over enabled, monthly surplus will be added to the next month.", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500), modifier = Modifier.padding(start = 15.dp))
+            }
         }
     }
 }
