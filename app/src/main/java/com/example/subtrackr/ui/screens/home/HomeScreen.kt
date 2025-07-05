@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,9 +17,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Info
@@ -27,6 +29,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -57,108 +60,182 @@ fun HomeScreen(navController: NavController) {
     var deleteDialog by remember { mutableStateOf(false) }
     var detailsDialog by remember { mutableStateOf(false) }
     var optionsDialog by remember { mutableStateOf(false) }
-    Column (
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = LightBackground)
-            .padding(vertical = 20.dp),
-    ) {
 
-        // First main section
-        Column (
-            modifier = Modifier.padding(horizontal = 20.dp)
+
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(color = LightBackground)) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(vertical = 20.dp),
         ) {
 
-        // First section - Header
-        Row (
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Row (
-                verticalAlignment = Alignment.Bottom,
+            // First main section
+            Column(
+                modifier = Modifier.padding(horizontal = 20.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Menu,
-                    contentDescription = "Menu Icon",
-                    modifier = Modifier.size(30.dp)
-                )
 
-                Spacer(modifier = Modifier.width(30.dp))
-                Image(painter = painterResource(id = R.drawable.app_icon), contentDescription = "App Icon", modifier = Modifier.height(25.dp))
+                // First section - Header
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Bottom,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Menu,
+                            contentDescription = "Menu Icon",
+                            modifier = Modifier.size(30.dp)
+                        )
+
+                        Spacer(modifier = Modifier.width(30.dp))
+                        Image(
+                            painter = painterResource(id = R.drawable.app_icon),
+                            contentDescription = "App Icon",
+                            modifier = Modifier.height(25.dp)
+                        )
+                    }
+
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "Search Icon",
+                        modifier = Modifier.size(30.dp),
+                        tint = PrimaryGreen
+                    )
+                }
+
+                // Second section - Date
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 30.dp, bottom = 20.dp),
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Image(
+                        painter = painterResource(id = R.drawable.left_arrow_icon),
+                        contentDescription = "Left Arrow Icon"
+                    )
+                    Text(
+                        "June, 2025",
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            color = PrimaryGreen,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.W500
+                        )
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.right_arrow_icon),
+                        contentDescription = "Right Arrow Icon"
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.filter_icon),
+                        contentDescription = "Filter Icon"
+                    )
+                }
+
+                // Third section - Expense amount
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        "EXPENSE",
+                        style = MaterialTheme.typography.titleMedium.copy(color = PrimaryGreen)
+                    )
+                    Text(
+                        "$5,910.00",
+                        style = MaterialTheme.typography.titleMedium.copy(color = PrimaryRed)
+                    )
+                }
             }
 
-            Icon(
-                imageVector = Icons.Filled.Search,
-                contentDescription = "Search Icon",
-                modifier = Modifier.size(30.dp),
-                tint = PrimaryGreen
-            )
-        }
+            Divider(color = LightGray, thickness = 3.dp)
 
-        // Second section - Date
-        Row (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 30.dp, bottom = 20.dp),
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Spacer(modifier = Modifier.width(8.dp))
-            Image(painter = painterResource(id = R.drawable.left_arrow_icon), contentDescription = "Left Arrow Icon")
-            Text("June, 2025",style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontSize = 20.sp, fontWeight = FontWeight.W500))
-            Image(painter = painterResource(id = R.drawable.right_arrow_icon), contentDescription = "Right Arrow Icon")
-            Image(painter = painterResource(id = R.drawable.filter_icon), contentDescription = "Filter Icon")
-        }
-
-        // Third section - Expense amount
-        Column (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text("EXPENSE",style = MaterialTheme.typography.titleMedium.copy(color = PrimaryGreen))
-            Text("$5,910.00",style = MaterialTheme.typography.titleMedium.copy(color = PrimaryRed))
-        }
-        }
-
-        Divider(color = LightGray, thickness = 3.dp)
-
-        Column (
-            modifier = Modifier.padding(20.dp)
-        ) {
-            Text("Jun 21, Saturday",style = MaterialTheme.typography.bodyLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500))
-            Spacer(modifier = Modifier.height(10.dp))
-            Divider(color = PrimaryGreen, thickness = 1.dp)
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Row (
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            // Second main section
+            Column(
+                modifier = Modifier.padding(20.dp)
             ) {
-                Row {
-                    Image(painter = painterResource(id = R.drawable.telephone_icon),
-                        contentDescription = "Expense Icon")
+                Text(
+                    "Jun 21, Saturday",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = PrimaryGreen,
+                        fontWeight = FontWeight.W500
+                    )
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Divider(color = PrimaryGreen, thickness = 1.dp)
+                Spacer(modifier = Modifier.height(10.dp))
 
-                    Column (
-                        modifier = Modifier.padding(start = 10.dp)
-                    ) {
-                        Text("Telephone",style = MaterialTheme.typography.titleSmall.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 20.sp))
-                        Spacer(modifier = Modifier.height(5.dp))
-                        Row (
-                            verticalAlignment = Alignment.CenterVertically
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row {
+                        Image(
+                            painter = painterResource(id = R.drawable.telephone_icon),
+                            contentDescription = "Expense Icon"
+                        )
+
+                        Column(
+                            modifier = Modifier.padding(start = 10.dp)
                         ) {
-                            Image(painter = painterResource(id = R.drawable.cash_icon),
-                                contentDescription = "Cash Icon", modifier = Modifier.size(30.dp))
-                            Text("Cash",style = MaterialTheme.typography.titleMedium.copy(color = LightGreen), modifier = Modifier.padding(start = 5.dp))
+                            Text(
+                                "Telephone",
+                                style = MaterialTheme.typography.titleSmall.copy(
+                                    color = PrimaryGreen,
+                                    fontWeight = FontWeight.W500,
+                                    fontSize = 20.sp
+                                )
+                            )
+                            Spacer(modifier = Modifier.height(5.dp))
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.cash_icon),
+                                    contentDescription = "Cash Icon",
+                                    modifier = Modifier.size(30.dp)
+                                )
+                                Text(
+                                    "Cash",
+                                    style = MaterialTheme.typography.titleMedium.copy(color = LightGreen),
+                                    modifier = Modifier.padding(start = 5.dp)
+                                )
+                            }
                         }
                     }
+                    Text(
+                        "-$5,910.00",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            color = PrimaryRed,
+                            fontWeight = FontWeight.W500,
+                            fontSize = 20.sp
+                        )
+                    )
                 }
-                Text("-$5,910.00",style = MaterialTheme.typography.titleMedium.copy(color = PrimaryRed, fontWeight = FontWeight.W500, fontSize = 20.sp))
             }
         }
+
+        // Align FAB to bottom-end
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(20.dp)
+        ) {
+            LargeExample(onClick = {
+                // Example: navController.navigate("expense")
+            })
+        }
     }
+
     if (deleteDialog) {
         deleteDialogView(
             dismiss = { deleteDialog = false },
@@ -381,5 +458,18 @@ fun optionsDialogView(dismiss: () -> Unit) {
                 Text("With Carry over enabled, monthly surplus will be added to the next month.", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500), modifier = Modifier.padding(start = 15.dp))
             }
         }
+    }
+}
+
+@Composable
+fun LargeExample(onClick: () -> Unit) {
+    SmallFloatingActionButton(
+        onClick = { onClick() },
+        containerColor = Color.White,
+        contentColor = PrimaryGreen,
+        shape = CircleShape,
+        modifier = Modifier.size(50.dp)
+    ) {
+        Icon(Icons.Filled.Add, "Add expense", modifier = Modifier.size(30.dp))
     }
 }
