@@ -14,7 +14,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -26,17 +31,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.subtrackr.R
+import com.example.subtrackr.ui.theme.BorderGreen
+import com.example.subtrackr.ui.theme.LightBackground
+import com.example.subtrackr.ui.theme.LightGreen
+import com.example.subtrackr.ui.theme.PlaceholderGray
+import com.example.subtrackr.ui.theme.PrimaryGreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExpenseScreen() {
+fun ExpenseScreen(navController: NavController) {
     var notesText by remember { mutableStateOf("") }
     var amountText by remember { mutableStateOf("0") }
     Column (
@@ -44,29 +55,16 @@ fun ExpenseScreen() {
             .fillMaxSize()
             .padding(top = 20.dp, start = 10.dp, end = 10.dp),
     ) {
+        // First section - header
         Row (
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row (
-                verticalAlignment = Alignment.Bottom
-            ) {
-                Image(painter = painterResource(id = R.drawable.cancel_icon),
-                    contentDescription = "Cancel Icon", modifier = Modifier.size(22.dp))
-                Spacer(modifier = Modifier.padding(start = 8.dp))
-                Text("CANCEL", style = TextStyle(fontSize = 18.sp), color = Color(0xFF679384), fontWeight = FontWeight.Bold)
-            }
-
-            Row (
-                verticalAlignment = Alignment.Bottom
-            ) {
-                Image(painter = painterResource(id = R.drawable.save_icon),
-                    contentDescription = "Cancel Icon", modifier = Modifier.size(22.dp))
-                Spacer(modifier = Modifier.padding(start = 8.dp))
-                Text("SAVE", style = TextStyle(fontSize = 18.sp), color = Color(0xFF679384), fontWeight = FontWeight.Bold)
-            }
+            ActionTag(icon = Icons.Filled.Close, iconDescription = "Close Icon", title = "CANCEL")
+            ActionTag(icon = Icons.Filled.Check, iconDescription = "Check Icon", title = "SAVE")
         }
 
+        // Second section - expense
         Row (
             modifier = Modifier
                 .fillMaxWidth()
@@ -76,69 +74,20 @@ fun ExpenseScreen() {
         ) {
             Image(painter = painterResource(id = R.drawable.expense_tick),
                 contentDescription = "Expense Icon", modifier = Modifier.size(24.dp))
-            Spacer(modifier = Modifier.padding(start = 8.dp))
-            Text("EXPENSE", style = TextStyle(fontSize = 20.sp), color = Color(0xFF679384), fontWeight = FontWeight.Bold)
+            Text("EXPENSE", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontSize = 20.sp, fontWeight = FontWeight.Bold), modifier = Modifier.padding(start = 8.dp))
         }
 
+        // Third section - account, category
         Row (
             horizontalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier.fillMaxWidth()
         ) {
-            Column (
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Account", style = TextStyle(fontSize = 18.sp), color = Color(0xFF679384), fontWeight = FontWeight.Medium)
-                Spacer(modifier = Modifier.padding(bottom = 5.dp))
-                Row (
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(55.dp)
-                        .border(
-                            width = 2.dp,
-                            color = Color(0xFF689383),
-                            shape = RoundedCornerShape(6.dp)
-                        )
-                        .padding(horizontal = 12.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Image(painter = painterResource(id = R.drawable.expense_account),
-                        contentDescription = "Expense Account", modifier = Modifier.size(35.dp))
-                    Spacer(modifier = Modifier.padding(start = 8.dp))
-                    Text("Account", style = TextStyle(fontSize = 20.sp), color = Color(0xFF679384), fontWeight = FontWeight.Medium)
-                }
-            }
-
-            Column (
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Category", style = TextStyle(fontSize = 18.sp), color = Color(0xFF679384), fontWeight = FontWeight.Medium)
-                Spacer(modifier = Modifier.padding(bottom = 5.dp))
-                Row (
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(55.dp)
-                        .border(
-                            width = 2.dp,
-                            color = Color(0xFF689383),
-                            shape = RoundedCornerShape(6.dp)
-                        )
-                        .padding(horizontal = 12.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Image(painter = painterResource(id = R.drawable.expense_category),
-                        contentDescription = "Expense Category", modifier = Modifier.size(35.dp))
-                    Spacer(modifier = Modifier.padding(start = 8.dp))
-                    Text("Category", style = TextStyle(fontSize = 20.sp), color = Color(0xFF679384), fontWeight = FontWeight.Medium)
-                }
-            }
+            AccountTag(title= "Account", icon= R.drawable.expense_account, iconDescription= "Expense Account", modifier = Modifier.weight(1f))
+            AccountTag(title= "Category", icon= R.drawable.expense_category, iconDescription= "Expense Category", modifier = Modifier.weight(1f))
         }
 
         Spacer(modifier = Modifier.height(6.dp))
 
+        // Fourth section - Add notes
         TextField(
             value = notesText,
             onValueChange = { notesText = it },
@@ -149,36 +98,35 @@ fun ExpenseScreen() {
                 unfocusedIndicatorColor = Color.Transparent,
                 placeholderColor = Color.LightGray
             ),
-            textStyle = TextStyle(
-                fontSize = 20.sp, color = Color(0xFF689383), fontWeight = FontWeight.SemiBold),
-            placeholder = { Text("Add notes", style = TextStyle(fontSize = 20.sp), color = Color(0xFF9c9778), fontWeight = FontWeight.Medium) },
+            textStyle = TextStyle(fontSize = 20.sp, color = BorderGreen, fontWeight = FontWeight.SemiBold),
+            placeholder = { Text("Add notes", style = MaterialTheme.typography.titleLarge.copy(color = PlaceholderGray, fontSize = 20.sp, fontWeight = FontWeight.W500)) },
             modifier = Modifier
                 .border(
                     width = 2.dp,
-                    color = Color(0xFF689383),
+                    color = BorderGreen,
                     shape = RoundedCornerShape(6.dp)
                 )
                 .fillMaxWidth()
-                .background(color = Color(0xFFfffcd6))
+                .background(color = LightBackground)
                 .height(105.dp)
         )
 
         Spacer(modifier = Modifier.height(6.dp))
 
+        // Fifth section - Amount
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .border(
                     width = 2.dp,
-                    color = Color(0xFF689383),
+                    color = BorderGreen,
                     shape = RoundedCornerShape(10.dp)
                 )
                 .padding(horizontal = 20.dp),
             horizontalArrangement = Arrangement.End
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(amountText, style = TextStyle(fontSize = 50.sp), color = Color(0xFF084c3c), fontWeight = FontWeight.Medium)
-                Spacer(modifier = Modifier.padding(start = 15.dp))
+                Text(amountText,style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontSize = 50.sp, fontWeight = FontWeight.W500), modifier = Modifier.padding(end = 15.dp))
                 Image(
                     painter = painterResource(id = R.drawable.expense_cancel),
                     contentDescription = "Cancel Icon",
@@ -187,211 +135,98 @@ fun ExpenseScreen() {
             }
         }
         Spacer(modifier = Modifier.height(4.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(60.dp)
-                    .background(color = Color(0xFF689383), shape = RoundedCornerShape(8.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    "+",
-                    style = TextStyle(fontSize = 25.sp),
-                    color = Color.White,
-                    fontWeight = FontWeight.Medium,
-                    textAlign = TextAlign.Center
-                )
-            }
 
-            listOf("7", "8", "9").forEach { text ->
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(60.dp)
-                        .background(color = Color.White, shape = RoundedCornerShape(8.dp))
-                        .border(
-                            width = 2.dp,
-                            color = Color(0xFF689383),
-                            shape = RoundedCornerShape(8.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text,
-                        style = TextStyle(fontSize = 25.sp),
-                        color = Color(0xFF689383),
-                        fontWeight = FontWeight.Medium,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
-        }
+        // Sixth section - Calculator
+        CalculatorRow(listOf("+", "7", "8", "9"))
         Spacer(modifier = Modifier.height(4.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(60.dp)
-                    .background(color = Color(0xFF689383), shape = RoundedCornerShape(8.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    "-",
-                    style = TextStyle(fontSize = 25.sp),
-                    color = Color.White,
-                    fontWeight = FontWeight.Medium,
-                    textAlign = TextAlign.Center
-                )
-            }
-
-            listOf("4", "5", "6").forEach { text ->
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(60.dp)
-                        .background(color = Color.White, shape = RoundedCornerShape(8.dp))
-                        .border(
-                            width = 2.dp,
-                            color = Color(0xFF689383),
-                            shape = RoundedCornerShape(8.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text,
-                        style = TextStyle(fontSize = 25.sp),
-                        color = Color(0xFF689383),
-                        fontWeight = FontWeight.Medium,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
-        }
-
+        CalculatorRow(listOf("-", "4", "5", "6"))
         Spacer(modifier = Modifier.height(4.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(60.dp)
-                    .background(color = Color(0xFF689383), shape = RoundedCornerShape(8.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    "x",
-                    style = TextStyle(fontSize = 25.sp),
-                    color = Color.White,
-                    fontWeight = FontWeight.Medium,
-                    textAlign = TextAlign.Center
-                )
-            }
-
-            listOf("1", "2", "3").forEach { text ->
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(60.dp)
-                        .background(color = Color.White, shape = RoundedCornerShape(8.dp))
-                        .border(
-                            width = 2.dp,
-                            color = Color(0xFF689383),
-                            shape = RoundedCornerShape(8.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text,
-                        style = TextStyle(fontSize = 25.sp),
-                        color = Color(0xFF689383),
-                        fontWeight = FontWeight.Medium,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
-        }
-
+        CalculatorRow(listOf("x", "1", "2", "3"))
         Spacer(modifier = Modifier.height(4.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(60.dp)
-                    .background(color = Color(0xFF689383), shape = RoundedCornerShape(8.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    "/",
-                    style = TextStyle(fontSize = 25.sp),
-                    color = Color.White,
-                    fontWeight = FontWeight.Medium,
-                    textAlign = TextAlign.Center
-                )
-            }
-
-            listOf("0", ".").forEach { text ->
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(60.dp)
-                        .background(color = Color.White, shape = RoundedCornerShape(8.dp))
-                        .border(
-                            width = 2.dp,
-                            color = Color(0xFF689383),
-                            shape = RoundedCornerShape(8.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text,
-                        style = TextStyle(fontSize = 25.sp),
-                        color = Color(0xFF689383),
-                        fontWeight = FontWeight.Medium,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(60.dp)
-                    .background(color = Color(0xFF689383), shape = RoundedCornerShape(8.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    "=",
-                    style = TextStyle(fontSize = 25.sp),
-                    color = Color.White,
-                    fontWeight = FontWeight.Medium,
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
+        CalculatorRow(listOf("/", "0", ".", "="))
 
         Row (
             horizontalArrangement = Arrangement.SpaceAround,
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("June 20, 2025", style = TextStyle(fontSize = 20.sp), color = Color(0xFF679384), fontWeight = FontWeight.Medium, textAlign = TextAlign.Right)
-            Text("|", style = TextStyle(fontSize = 30.sp), color = Color(0xFF679384), fontWeight = FontWeight.ExtraBold)
-            Text("9:49 PM", style = TextStyle(fontSize = 20.sp), color = Color(0xFF679384), fontWeight = FontWeight.Medium)
+            Text("June 20, 2025", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 20.sp, fontWeight = FontWeight.W500))
+            Text("|", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold))
+            Text("9:49 PM", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 20.sp, fontWeight = FontWeight.W500))
+        }
+    }
+}
+
+@Composable
+fun ActionTag(icon: ImageVector, iconDescription: String, title: String) {
+    Row (
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = iconDescription,
+            modifier = Modifier.size(27.dp),
+            tint = LightGreen
+        )
+        Text(title,style = MaterialTheme.typography.titleLarge.copy(color = LightGreen, fontSize = 18.sp, fontWeight = FontWeight.Bold), modifier = Modifier.padding(start = 8.dp))
+    }
+}
+
+@Composable
+fun AccountTag(title: String, icon: Int, iconDescription: String, modifier: Modifier = Modifier) {
+    Column (
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        Text(title, style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500))
+        Spacer(modifier = Modifier.height(5.dp))
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(55.dp)
+                .border(
+                    width = 2.dp,
+                    color = BorderGreen,
+                    shape = RoundedCornerShape(6.dp)
+                )
+                .padding(horizontal = 12.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Image(painter = painterResource(id = icon),
+                contentDescription = iconDescription, modifier = Modifier.size(35.dp))
+            Text(title, style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontWeight = FontWeight.W500), modifier = Modifier.padding(start = 8.dp))
+        }
+    }
+}
+
+@Composable
+fun CalculatorRow(buttons: List<String>) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        buttons.forEach { text ->
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(60.dp)
+                    .background(
+                        color = if (text in listOf("+", "-", "x", "/", "=")) BorderGreen else Color.White,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .border(2.dp, BorderGreen, RoundedCornerShape(8.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        color = if (text in listOf("+", "-", "x", "/", "=")) Color.White else BorderGreen,
+                        fontSize = 25.sp,
+                        fontWeight = FontWeight.W500
+                    )
+                )
+            }
         }
     }
 }
