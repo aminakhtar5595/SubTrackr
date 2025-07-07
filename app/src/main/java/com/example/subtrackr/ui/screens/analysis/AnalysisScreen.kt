@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.subtrackr.R
+import com.example.subtrackr.ui.components.FloatingButton
 import com.example.subtrackr.ui.components.Header
-import com.example.subtrackr.ui.screens.home.LargeExample
 import com.example.subtrackr.ui.theme.LightBackground
 import com.example.subtrackr.ui.theme.LightGray
 import com.example.subtrackr.ui.theme.PrimaryGreen
@@ -88,7 +88,7 @@ fun AnalysisScreen(navController: NavController) {
                 .align(Alignment.BottomEnd)
                 .padding(20.dp)
         ) {
-            LargeExample(onClick = {
+            FloatingButton(onClick = {
                 // Example: navController.navigate("expense")
             })
         }

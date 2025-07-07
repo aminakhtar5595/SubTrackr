@@ -17,17 +17,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.subtrackr.R
+import com.example.subtrackr.ui.components.FloatingButton
 import com.example.subtrackr.ui.components.Header
 import com.example.subtrackr.ui.theme.BackgroundRed
 import com.example.subtrackr.ui.theme.BorderGreen
@@ -148,7 +146,7 @@ fun HomeScreen(navController: NavController) {
                 .align(Alignment.BottomEnd)
                 .padding(20.dp)
         ) {
-            LargeExample(onClick = {
+            FloatingButton(onClick = {
                 // Example: navController.navigate("expense")
             })
         }
@@ -376,18 +374,5 @@ fun optionsDialogView(dismiss: () -> Unit) {
                 Text("With Carry over enabled, monthly surplus will be added to the next month.", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500), modifier = Modifier.padding(start = 15.dp))
             }
         }
-    }
-}
-
-@Composable
-fun LargeExample(onClick: () -> Unit) {
-    SmallFloatingActionButton(
-        onClick = { onClick() },
-        containerColor = Color.White,
-        contentColor = PrimaryGreen,
-        shape = CircleShape,
-        modifier = Modifier.size(50.dp)
-    ) {
-        Icon(Icons.Filled.Add, "Add expense", modifier = Modifier.size(30.dp))
     }
 }
