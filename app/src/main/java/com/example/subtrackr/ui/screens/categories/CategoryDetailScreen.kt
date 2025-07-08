@@ -1,36 +1,60 @@
 package com.example.subtrackr.ui.screens.categories
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.subtrackr.ui.theme.BorderGreen
+import com.example.subtrackr.ui.theme.LightBackground
+import com.example.subtrackr.ui.theme.LightGray
 import com.example.subtrackr.ui.theme.PrimaryGreen
 
 @Composable
 fun CategoryDetailScreen(navController: NavController) {
-    Row(
-        modifier = Modifier.padding(20.dp)
+    Column (
+        modifier = Modifier
+            .background(color = LightBackground)
     ) {
-        Icon(
-            imageVector = Icons.Outlined.Clear,
-            contentDescription = "Menu Icon",
-            modifier = Modifier.size(30.dp),
-            tint = PrimaryGreen,
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Clear,
+                contentDescription = "Menu Icon",
+                modifier = Modifier.size(30.dp),
+                tint = PrimaryGreen,
+            )
 
-        Text("Category details", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontSize = 18.sp, fontWeight = FontWeight.W500))
+            Column {
+                Text("Category details", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500), modifier = Modifier.padding(bottom = 5.dp))
+                Text("Records: All time", style = MaterialTheme.typography.titleMedium.copy(color = BorderGreen))
+            }
+        }
+        Divider(color = LightGray, thickness = 3.dp)
     }
+
 }
