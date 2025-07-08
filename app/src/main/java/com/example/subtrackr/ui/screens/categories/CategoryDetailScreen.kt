@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.subtrackr.R
 import com.example.subtrackr.ui.theme.BorderGreen
+import com.example.subtrackr.ui.theme.DarkBackground
 import com.example.subtrackr.ui.theme.LightBackground
 import com.example.subtrackr.ui.theme.LightGray
 import com.example.subtrackr.ui.theme.PrimaryGreen
@@ -78,6 +80,24 @@ fun CategoryDetailScreen(navController: NavController) {
                     Text("Food", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500), modifier = Modifier.padding(bottom = 5.dp))
                     Text("Expense category", style = MaterialTheme.typography.titleMedium.copy(color = BorderGreen))
                 }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .border(2.dp, color = LightGray, RoundedCornerShape(6.dp))
+                    .padding(12.dp)
+                    .background(color = DarkBackground)
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Info,
+                    contentDescription = "Menu Icon",
+                    modifier = Modifier.size(30.dp),
+                    tint = BorderGreen,
+                )
+                Text("You can see Monthly, weekly, or daily statistics in the Analysis section.", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500), modifier = Modifier.padding(start = 15.dp))
             }
         }
     }
