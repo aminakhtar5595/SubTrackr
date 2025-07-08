@@ -16,7 +16,7 @@ import com.example.subtrackr.ui.screens.splash.SplashScreen
 fun AppNavigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "analysis") {
+    NavHost(navController = navController, startDestination = "splash") {
         composable("splash") { SplashScreen(navController) }
         composable("home") { HomeScreen(navController) }
         composable("search") { SearchScreen(navController) }
