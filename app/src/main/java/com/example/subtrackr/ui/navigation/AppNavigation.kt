@@ -22,7 +22,6 @@ fun AppNavigation() {
         composable("search") { SearchScreen(navController) }
         composable("expense") { ExpenseScreen(navController) }
         composable("category") { CategoriesScreen(navController) }
-        composable("category_detail") { CategoryDetailScreen(navController) }
         composable("analysis") { AnalysisScreen(navController) }
     }
 }
