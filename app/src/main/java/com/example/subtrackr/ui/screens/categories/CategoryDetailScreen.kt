@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.List
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +36,7 @@ import com.example.subtrackr.ui.theme.DarkBackground
 import com.example.subtrackr.ui.theme.LightBackground
 import com.example.subtrackr.ui.theme.LightGray
 import com.example.subtrackr.ui.theme.PrimaryGreen
+import com.example.subtrackr.ui.theme.PrimaryRed
 
 @Composable
 fun CategoryDetailScreen(navController: NavController) {
@@ -73,7 +75,7 @@ fun CategoryDetailScreen(navController: NavController) {
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.food_icon),
-                    contentDescription = "App Icon",
+                    contentDescription = "Food Category Icon",
                 )
 
                 Column {
@@ -88,18 +90,69 @@ fun CategoryDetailScreen(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .border(2.dp, color = LightGray, RoundedCornerShape(6.dp))
-                    .padding(12.dp)
                     .background(color = DarkBackground)
+                    .padding(12.dp)
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Info,
-                    contentDescription = "Menu Icon",
+                    contentDescription = "Info Icon",
                     modifier = Modifier.size(30.dp),
                     tint = BorderGreen,
                 )
                 Text("You can see Monthly, weekly, or daily statistics in the Analysis section.", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500), modifier = Modifier.padding(start = 15.dp))
             }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Total 7 records in this category", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 20.sp), modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 15.dp))
+
+                Row (
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.List,
+                        contentDescription = "Filter Icon",
+                        modifier = Modifier.size(25.dp),
+                        tint = BorderGreen,
+                    )
+                    Text("NEW TO OLD", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontWeight = FontWeight.W500, fontSize = 20.sp))
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+            Text("July, 2025", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 18.sp), modifier = Modifier.padding(bottom = 10.dp))
+            Divider(color = PrimaryGreen, thickness = 1.dp)
+            Spacer(modifier = Modifier.height(10.dp))
+            repeat(5) {
+                ExpenseInfo()
+            }
         }
     }
+}
 
+@Composable
+fun ExpenseInfo() {
+    Row (
+//        verticalAlignment = Alignment.Bottom,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth().padding(bottom = 15.dp)
+    ) {
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text("● Jul 05 10:14 AM", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontWeight = FontWeight.W500, fontSize = 20.sp), modifier = Modifier.padding(end = 10.dp))
+            Text("Cash", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.SemiBold, fontSize = 20.sp))
+        }
+        Text("-$60.00", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryRed, fontWeight = FontWeight.W500, fontSize = 20.sp))
+    }
 }
