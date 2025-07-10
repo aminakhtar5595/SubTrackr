@@ -147,7 +147,7 @@ fun HomeScreen(navController: NavController) {
                 .padding(20.dp)
         ) {
             FloatingButton(onClick = {
-                // Example: navController.navigate("expense")
+                 navController.navigate("expense")
             })
         }
     }
