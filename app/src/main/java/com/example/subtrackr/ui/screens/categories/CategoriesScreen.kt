@@ -2,6 +2,7 @@ package com.example.subtrackr.ui.screens.categories
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,7 +40,7 @@ fun CategoriesScreen(navController: NavController) {
             .verticalScroll(scrollState)
             .padding(vertical = 20.dp),
     ) {
-        Header()
+        Header(onClickSearch = { navController.navigate("search") })
 
         Divider(color = LightGray, thickness = 3.dp)
         // Fourth section - Categories section
@@ -50,30 +51,31 @@ fun CategoriesScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(5.dp))
             Divider(color = PrimaryGreen, thickness = 1.5.dp)
             listOf(
-                ExpenseCategory("Food", R.drawable.food_icon),
-                ExpenseCategory("Transport", R.drawable.transportation_icon),
-                ExpenseCategory("Shopping", R.drawable.shopping_icon),
-                ExpenseCategory("Health", R.drawable.health_icon),
-                ExpenseCategory("Bills", R.drawable.bills_icon),
-                ExpenseCategory("Entertainment", R.drawable.entertainment_icon),
-                ExpenseCategory("Beauty", R.drawable.beauty_icon),
-                ExpenseCategory("Baby", R.drawable.baby_icon),
-                ExpenseCategory("Car", R.drawable.car_icon),
-                ExpenseCategory("Clothing", R.drawable.clothing_icon),
-                ExpenseCategory("Education", R.drawable.education_icon),
-                ExpenseCategory("Electronics", R.drawable.electronics_icon),
+                ExpenseCategory("Food", R.drawable.food_icon, onClick = { navController.navigate("category_details") }),
+                ExpenseCategory("Transport", R.drawable.transportation_icon, onClick = { navController.navigate("category_details") }),
+                ExpenseCategory("Shopping", R.drawable.shopping_icon, onClick = { navController.navigate("category_details") }),
+                ExpenseCategory("Health", R.drawable.health_icon, onClick = { navController.navigate("category_details") }),
+                ExpenseCategory("Bills", R.drawable.bills_icon, onClick = { navController.navigate("category_details") }),
+                ExpenseCategory("Entertainment", R.drawable.entertainment_icon, onClick = { navController.navigate("category_details") }),
+                ExpenseCategory("Beauty", R.drawable.beauty_icon, onClick = { navController.navigate("category_details") }),
+                ExpenseCategory("Baby", R.drawable.baby_icon, onClick = { navController.navigate("category_details") }),
+                ExpenseCategory("Car", R.drawable.car_icon, onClick = { navController.navigate("category_details") }),
+                ExpenseCategory("Clothing", R.drawable.clothing_icon, onClick = { navController.navigate("category_details") }),
+                ExpenseCategory("Education", R.drawable.education_icon, onClick = { navController.navigate("category_details") }),
+                ExpenseCategory("Electronics", R.drawable.electronics_icon, onClick = { navController.navigate("category_details") }),
             )
         }
     }
 }
 
 @Composable
-fun ExpenseCategory(name: String, image: Int) {
+fun ExpenseCategory(name: String, image: Int, onClick: () -> Unit) {
     Row (
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 10.dp, horizontal = 5.dp),
+            .padding(vertical = 10.dp, horizontal = 5.dp)
+            .clickable { onClick() },
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row (
