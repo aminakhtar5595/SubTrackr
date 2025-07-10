@@ -1,6 +1,7 @@
 package com.example.subtrackr.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,7 +29,7 @@ import com.example.subtrackr.ui.theme.PrimaryGreen
 import com.example.subtrackr.ui.theme.PrimaryRed
 
 @Composable
-fun Header() {
+fun Header(onClickSearch: () -> Unit) {
     // First main section
     Column(
         modifier = Modifier.padding(horizontal = 20.dp)
@@ -59,7 +60,7 @@ fun Header() {
             Icon(
                 imageVector = Icons.Filled.Search,
                 contentDescription = "Search Icon",
-                modifier = Modifier.size(30.dp),
+                modifier = Modifier.size(30.dp).clickable { onClickSearch() },
                 tint = PrimaryGreen
             )
         }

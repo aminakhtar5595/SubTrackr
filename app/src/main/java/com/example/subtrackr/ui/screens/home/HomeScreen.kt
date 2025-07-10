@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -70,13 +71,13 @@ fun HomeScreen(navController: NavController) {
         ) {
 
             // First main section
-            Header()
+            Header(onClickSearch = { navController.navigate("search") })
 
             Divider(color = LightGray, thickness = 3.dp)
 
             // Second main section
             Column(
-                modifier = Modifier.padding(20.dp)
+                modifier = Modifier.padding(20.dp).clickable { detailsDialog = true }
             ) {
                 Text(
                     "Jun 21, Saturday",
@@ -147,7 +148,7 @@ fun HomeScreen(navController: NavController) {
                 .padding(20.dp)
         ) {
             FloatingButton(onClick = {
-                // Example: navController.navigate("expense")
+                 navController.navigate("expense")
             })
         }
     }
@@ -161,6 +162,14 @@ fun HomeScreen(navController: NavController) {
     if (detailsDialog) {
         detailsDialogView(
             dismiss = { detailsDialog = false },
+            delete = {
+                detailsDialog = false
+                deleteDialog = true
+            },
+            edit = {
+                detailsDialog = false
+                navController.navigate("expense")
+            }
         )
     }
 
@@ -224,7 +233,7 @@ fun deleteDialogView(dismiss: () -> Unit) {
 }
 
 @Composable
-fun detailsDialogView(dismiss: () -> Unit) {
+fun detailsDialogView(dismiss: () -> Unit, delete: () -> Unit, edit: () -> Unit) {
     Dialog(onDismissRequest = { dismiss() }) {
         Column(
             modifier = Modifier
@@ -244,15 +253,15 @@ fun detailsDialogView(dismiss: () -> Unit) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Image(painter = painterResource(id = R.drawable.cross_icon),
-                    contentDescription = "Cross Icon")
+                    contentDescription = "Cross Icon", Modifier.clickable { dismiss() })
 
                 Row {
                     Image(painter = painterResource(id = R.drawable.delete_icon),
-                        contentDescription = "Delete Icon")
+                        contentDescription = "Delete Icon", Modifier.clickable { delete() })
 
                     Spacer(modifier = Modifier.width(20.dp))
                     Image(painter = painterResource(id = R.drawable.edit_icon),
-                        contentDescription = "Edit Icon")
+                        contentDescription = "Edit Icon", Modifier.clickable { edit() })
                 }
             }
 

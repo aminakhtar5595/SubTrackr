@@ -3,6 +3,7 @@ package com.example.subtrackr.ui.screens.expense
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -60,8 +61,8 @@ fun ExpenseScreen(navController: NavController) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            ActionTag(icon = Icons.Filled.Close, iconDescription = "Close Icon", title = "CANCEL")
-            ActionTag(icon = Icons.Filled.Check, iconDescription = "Check Icon", title = "SAVE")
+            ActionTag(icon = Icons.Filled.Close, iconDescription = "Close Icon", title = "CANCEL", onClick = { navController.popBackStack() })
+            ActionTag(icon = Icons.Filled.Check, iconDescription = "Check Icon", title = "SAVE", onClick = { navController.popBackStack() })
         }
 
         // Second section - expense
@@ -158,9 +159,10 @@ fun ExpenseScreen(navController: NavController) {
 }
 
 @Composable
-fun ActionTag(icon: ImageVector, iconDescription: String, title: String) {
+fun ActionTag(icon: ImageVector, iconDescription: String, title: String, onClick: () -> Unit) {
     Row (
-        verticalAlignment = Alignment.Bottom
+        verticalAlignment = Alignment.Bottom,
+        modifier = Modifier.clickable { onClick() }
     ) {
         Icon(
             imageVector = icon,

@@ -2,6 +2,7 @@ package com.example.subtrackr.ui.screens.analysis
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,7 +53,7 @@ fun AnalysisScreen(navController: NavController) {
         ) {
 
             // First main section
-            Header()
+            Header(onClickSearch = { navController.navigate("search") })
 
             Divider(color = LightGray, thickness = 3.dp)
 
@@ -62,7 +63,8 @@ fun AnalysisScreen(navController: NavController) {
                 label = "Bills",
                 amount = "-$3,800.00",
                 progress = 0.7f,
-                percentage = "64.30%"
+                percentage = "64.30%",
+                onClick = { navController.navigate("category_details") }
             )
 
             ExpenseItem(
@@ -70,7 +72,8 @@ fun AnalysisScreen(navController: NavController) {
                 label = "Telephone",
                 amount = "-$810.00",
                 progress = 0.2f,
-                percentage = "13.71%"
+                percentage = "13.71%",
+                onClick = { navController.navigate("category_details") }
             )
 
             ExpenseItem(
@@ -78,7 +81,8 @@ fun AnalysisScreen(navController: NavController) {
                 label = "Food",
                 amount = "-$900.00",
                 progress = 0.3f,
-                percentage = "15.54%"
+                percentage = "15.54%",
+                onClick = { navController.navigate("category_details") }
             )
         }
 
@@ -89,7 +93,7 @@ fun AnalysisScreen(navController: NavController) {
                 .padding(20.dp)
         ) {
             FloatingButton(onClick = {
-                // Example: navController.navigate("expense")
+                navController.navigate("expense")
             })
         }
     }
@@ -101,13 +105,15 @@ fun ExpenseItem(
     label: String,
     amount: String,
     progress: Float,
-    percentage: String
+    percentage: String,
+    onClick: () -> Unit
 ) {
     Column {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp),
+                .padding(top = 10.dp)
+                .clickable { onClick() },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceAround
         ) {
