@@ -5,11 +5,17 @@ SubTrackr is a clean, modern Android expense tracking app built with Jetpack Com
 ✨ Features
 
 ✅ Track Expenses: Easily add and manage daily expenses
+
 ✅ Category Management: Organize expenses into categories
+
 ✅ Analysis Section: Visual expense breakdown using progress bars and percentages
+
 ✅ Custom Dialogs: Beautifully designed popups and alerts
+
 ✅ Calculator Pad: Enter expense amounts directly via calculator-style UI
+
 ✅ Bottom Tab Navigation: Quickly switch between Home, Analysis, and Categories screens
+
 ✅ Material 3 Theming: Follows modern Android design guidelines
 
 📸 Screenshots
