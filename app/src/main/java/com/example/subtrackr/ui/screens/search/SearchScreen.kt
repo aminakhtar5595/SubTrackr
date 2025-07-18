@@ -32,7 +32,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.subtrackr.R
 import com.example.subtrackr.ui.theme.BorderGreen
 import com.example.subtrackr.ui.theme.LightBackground
