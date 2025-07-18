@@ -32,7 +32,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.subtrackr.R
 import com.example.subtrackr.ui.theme.BorderGreen
 import com.example.subtrackr.ui.theme.LightBackground
@@ -40,7 +39,7 @@ import com.example.subtrackr.ui.theme.PlaceholderGray
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(navController: NavController) {
+fun SearchScreen() {
     var searchText by remember { mutableStateOf("") }
     val foundResult by remember { mutableStateOf(true) }
     val searchRecords by remember { mutableStateOf(true) }
