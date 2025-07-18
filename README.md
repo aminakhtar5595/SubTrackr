@@ -26,7 +26,11 @@ State Management with Compose
 🛠️ How to Run
 
 Clone this repository
+
 Open in Android Studio Hedgehog or later
+
 Sync Gradle
+
 Run on Emulator or Physical Device
+
 git clone https://github.com/aminakhtar5595/subtrackr.git
