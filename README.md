@@ -21,6 +21,7 @@ SubTrackr is a clean, modern Android expense tracking app built with Jetpack Com
 
 
 📸 Screenshots
+![](/Users/mac/Downloads/Screenshot_20250718_213011.png)
 
 
 
