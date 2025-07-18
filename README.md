@@ -20,17 +20,16 @@ SubTrackr is a clean, modern Android expense tracking app built with Jetpack Com
 ✅ Material 3 Theming: Follows modern Android design guidelines
 
 
-📸 Screenshots
-<img src="/Users/mac/Downloads/Screenshot_20250718_213011.png"/>
-
-
-
 🚀 Tech Stack
 
 Kotlin
+
 Jetpack Compose
+
 Material 3
+
 Navigation Component
+
 State Management with Compose
 
 
