@@ -9,11 +9,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.subtrackr.ui.model.BottomNavItem
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.subtrackr.R
-import com.example.subtrackr.ui.theme.DarkBackground
 import com.example.subtrackr.ui.theme.LightBackground
 import com.example.subtrackr.ui.theme.PrimaryGreen
 
@@ -49,7 +46,7 @@ fun BottomNavBar(navController: NavController) {
                                 contentDescription = item.label
                             )
                         },
-                        label = { Text(item.label, style = MaterialTheme.typography.bodyLarge.copy(color = PrimaryGreen)) },
+                        label = { Text(item.label, style = MaterialTheme.typography.bodyMedium.copy(color = PrimaryGreen)) },
                         selected = selected,
                         onClick = {
                             if (!selected) {
@@ -62,9 +59,8 @@ fun BottomNavBar(navController: NavController) {
                         },
                         colors = NavigationBarItemDefaults.colors(
                             indicatorColor = LightBackground
-                        ),
+                        )
                     )
-
                 }
             }
         }

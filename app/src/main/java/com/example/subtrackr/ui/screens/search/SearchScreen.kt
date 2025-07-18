@@ -40,7 +40,7 @@ import com.example.subtrackr.ui.theme.PlaceholderGray
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(navController: NavController) {
+fun SearchScreen() {
     var searchText by remember { mutableStateOf("") }
     val foundResult by remember { mutableStateOf(true) }
     val searchRecords by remember { mutableStateOf(true) }
