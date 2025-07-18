@@ -1,4 +1,8 @@
 package com.example.subtrackr.ui.model
+import androidx.compose.ui.graphics.vector.ImageVector
 
-class BottomNavItem {
-}
+data class BottomNavItem(
+    val label: String,
+    val route: String,
+    val icon: ImageVector
+)
