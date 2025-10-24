@@ -37,6 +37,7 @@ import com.example.subtrackr.data.datasource.incomeData
 import com.example.subtrackr.data.local.ExpenseDataStoreManager
 import com.example.subtrackr.data.local.IncomeDataStoreManager
 import com.example.subtrackr.data.model.Category
+import com.example.subtrackr.ui.components.ButtonWithIcon
 import com.example.subtrackr.ui.components.Header
 import com.example.subtrackr.ui.theme.LightBackground
 import com.example.subtrackr.ui.theme.LightGray
@@ -82,8 +83,9 @@ fun CategoriesScreen(navController: NavController, context: Context = LocalConte
     ) {
         Header(onClickSearch = { navController.navigate("search") })
         Divider(color = LightGray, thickness = 3.dp)
+
         Column (
-            modifier = Modifier.padding(vertical = 20.dp, horizontal = 10.dp)
+            modifier = Modifier.padding(vertical = 20.dp, horizontal = 10.dp),
         ) {
 
             CategorySection(
@@ -97,6 +99,13 @@ fun CategoriesScreen(navController: NavController, context: Context = LocalConte
                 categories = expenseCategories,
                 navController = navController
             )
+            Spacer(modifier = Modifier.height(20.dp))
+            Column (
+                Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                ButtonWithIcon(onClick = { })
+            }
         }
     }
 }
