@@ -17,7 +17,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifier) {
-    NavHost(navController = navController, startDestination = "splash", modifier = modifier) {
+    NavHost(navController = navController, startDestination = "category", modifier = modifier) {
         composable("splash") { SplashScreen() }
         composable("home") { HomeScreen(navController) }
         composable("search") { SearchScreen() }
@@ -29,7 +29,7 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
 
     LaunchedEffect(Unit) {
         delay(2000)
-        navController.navigate("home") {
+        navController.navigate("category") {
             popUpTo("splash") { inclusive = true }
         }
     }
