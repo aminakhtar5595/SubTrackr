@@ -1,9 +1,9 @@
 package com.example.subtrackr.ui.screens.expense
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -32,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -40,17 +38,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.subtrackr.R
+import com.example.subtrackr.data.model.Expense
+import com.example.subtrackr.ui.components.AccountTag
+import com.example.subtrackr.ui.components.ActionTag
 import com.example.subtrackr.ui.theme.BorderGreen
 import com.example.subtrackr.ui.theme.LightBackground
-import com.example.subtrackr.ui.theme.LightGreen
 import com.example.subtrackr.ui.theme.PlaceholderGray
 import com.example.subtrackr.ui.theme.PrimaryGreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpenseScreen(navController: NavController) {
+    var accountType by remember { mutableStateOf("") }
+    var category by remember { mutableStateOf("") }
     var notesText by remember { mutableStateOf("") }
     var amountText by remember { mutableStateOf("0") }
+    var date by remember { mutableStateOf("") }
+    var time by remember { mutableStateOf("") }
+
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -62,7 +67,18 @@ fun ExpenseScreen(navController: NavController) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             ActionTag(icon = Icons.Filled.Close, iconDescription = "Close Icon", title = "CANCEL", onClick = { navController.popBackStack() })
-            ActionTag(icon = Icons.Filled.Check, iconDescription = "Check Icon", title = "SAVE", onClick = { navController.popBackStack() })
+            ActionTag(icon = Icons.Filled.Check, iconDescription = "Save Icon", title = "SAVE",
+                onClick = {
+                    val expense = Expense(
+                        accountType = "cash",
+                        category = "Food",
+                        note = notesText,
+                        amount = amountText,
+                        date = date,
+                        time = time
+                    )
+                    Log.d("ExpenseScreen", "Add expense: $expense" )
+                })
         }
 
         // Second section - expense
@@ -154,50 +170,6 @@ fun ExpenseScreen(navController: NavController) {
             Text("June 20, 2025", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 20.sp, fontWeight = FontWeight.W500))
             Text("|", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold))
             Text("9:49 PM", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 20.sp, fontWeight = FontWeight.W500))
-        }
-    }
-}
-
-@Composable
-fun ActionTag(icon: ImageVector, iconDescription: String, title: String, onClick: () -> Unit) {
-    Row (
-        verticalAlignment = Alignment.Bottom,
-        modifier = Modifier.clickable { onClick() }
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = iconDescription,
-            modifier = Modifier.size(27.dp),
-            tint = LightGreen
-        )
-        Text(title,style = MaterialTheme.typography.titleLarge.copy(color = LightGreen, fontSize = 18.sp, fontWeight = FontWeight.Bold), modifier = Modifier.padding(start = 8.dp))
-    }
-}
-
-@Composable
-fun AccountTag(title: String, icon: Int, iconDescription: String, modifier: Modifier = Modifier) {
-    Column (
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-    ) {
-        Text(title, style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500))
-        Spacer(modifier = Modifier.height(5.dp))
-        Row (
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(55.dp)
-                .border(
-                    width = 2.dp,
-                    color = BorderGreen,
-                    shape = RoundedCornerShape(6.dp)
-                )
-                .padding(horizontal = 12.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Image(painter = painterResource(id = icon),
-                contentDescription = iconDescription, modifier = Modifier.size(35.dp))
-            Text(title, style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontWeight = FontWeight.W500), modifier = Modifier.padding(start = 8.dp))
         }
     }
 }
