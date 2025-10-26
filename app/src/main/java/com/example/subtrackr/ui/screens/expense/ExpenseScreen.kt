@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -48,8 +50,10 @@ import com.example.subtrackr.ui.theme.PrimaryGreen
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.ModalBottomSheet
+import com.example.subtrackr.data.datasource.expenseData
 import com.example.subtrackr.ui.components.AccountTypeTag
 import com.example.subtrackr.ui.components.ButtonWithIcon
+import com.example.subtrackr.ui.components.CategoryTag
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,6 +69,7 @@ fun ExpenseScreen(navController: NavController) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     var showSheet by remember { mutableStateOf(false) }
+    var showCategorySheet by remember { mutableStateOf(false) }
 
     var selectAccountTitle by remember {
         mutableStateOf("Account")
@@ -120,7 +125,10 @@ fun ExpenseScreen(navController: NavController) {
                 showSheet = true
                 scope.launch { sheetState.show() }
             })
-            AccountTag(label= "Category", title= "Category", icon= R.drawable.expense_category, iconDescription= "Expense Category", modifier = Modifier.weight(1f), onClick = {})
+            AccountTag(label= "Category", title= "Category", icon= R.drawable.expense_category, iconDescription= "Expense Category", modifier = Modifier.weight(1f), onClick = {
+                showCategorySheet = true
+                scope.launch { sheetState.show() }
+            })
         }
 
         Spacer(modifier = Modifier.height(6.dp))
@@ -203,6 +211,17 @@ fun ExpenseScreen(navController: NavController) {
             showSheet = false
         }
     )
+
+    SelectCategoryModal(
+        showSheet = showCategorySheet,
+        sheetState = sheetState,
+        onDismissRequest = { showCategorySheet = false },
+        onAccountSelected = { title, icon ->
+            selectAccountTitle = title
+            selectedAccountIcon = icon
+            showSheet = false
+        }
+    )
 }
 
 @Composable
@@ -273,6 +292,48 @@ fun SelectAccountTypeModal(
                 AccountTypeTag(icon = R.drawable.cash_icon, title = "Cash", amount = "2,500.00",navigate = { onAccountSelected("Cash", R.drawable.cash_icon) })
                 Spacer(modifier = Modifier.height(20.dp))
                 ButtonWithIcon(title = "ADD NEW ACCOUNT", onClick = { })
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SelectCategoryModal(
+    showSheet: Boolean,
+    sheetState: SheetState,
+    onDismissRequest: () -> Unit,
+    onAccountSelected: (String, Int) -> Unit
+) {
+    val categoryData = expenseData.categories
+    if (showSheet) {
+        ModalBottomSheet(
+            onDismissRequest = onDismissRequest,
+            sheetState = sheetState,
+            dragHandle = null,
+            tonalElevation = 0.dp,
+            scrimColor = Color.Black.copy(alpha = 0.5f),
+        ) {
+            Column(
+                modifier = Modifier.padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    "Select a category",
+                    style = MaterialTheme.typography.headlineSmall.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 22.sp,)
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),
+                    verticalArrangement = Arrangement.spacedBy(20.dp)
+                ) {
+                    items(categoryData.size) { index ->
+                        val category = categoryData[index]
+                        CategoryTag(icon = category.icon, title = category.name)
+                    }
+                }
+                Spacer(modifier = Modifier.height(20.dp))
+                ButtonWithIcon(onClick = { })
             }
         }
     }
