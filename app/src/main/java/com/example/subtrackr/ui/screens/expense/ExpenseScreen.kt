@@ -22,11 +22,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +45,12 @@ import com.example.subtrackr.ui.theme.BorderGreen
 import com.example.subtrackr.ui.theme.LightBackground
 import com.example.subtrackr.ui.theme.PlaceholderGray
 import com.example.subtrackr.ui.theme.PrimaryGreen
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.ModalBottomSheet
+import com.example.subtrackr.ui.components.AccountTypeTag
+import com.example.subtrackr.ui.components.ButtonWithIcon
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,6 +61,10 @@ fun ExpenseScreen(navController: NavController) {
     var amountText by remember { mutableStateOf("0") }
     var date by remember { mutableStateOf("") }
     var time by remember { mutableStateOf("") }
+
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
+    var showSheet by remember { mutableStateOf(false) }
 
     Column (
         modifier = Modifier
@@ -98,8 +108,11 @@ fun ExpenseScreen(navController: NavController) {
         Row (
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            AccountTag(title= "Account", icon= R.drawable.expense_account, iconDescription= "Expense Account", modifier = Modifier.weight(1f))
-            AccountTag(title= "Category", icon= R.drawable.expense_category, iconDescription= "Expense Category", modifier = Modifier.weight(1f))
+            AccountTag(title= "Account", icon= R.drawable.expense_account, iconDescription= "Expense Account", modifier = Modifier.weight(1f), onClick = {
+                showSheet = true
+                scope.launch { sheetState.show() }
+            })
+            AccountTag(title= "Category", icon= R.drawable.expense_category, iconDescription= "Expense Category", modifier = Modifier.weight(1f), onClick = {})
         }
 
         Spacer(modifier = Modifier.height(6.dp))
@@ -108,13 +121,13 @@ fun ExpenseScreen(navController: NavController) {
         TextField(
             value = notesText,
             onValueChange = { notesText = it },
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.Transparent,
-                textColor = Color.Gray,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                placeholderColor = Color.LightGray
-            ),
+//            colors = TextFieldDefaults.textFieldColors(
+//                containerColor = Color.Transparent,
+//                textColor = Color.Gray,
+//                focusedIndicatorColor = Color.Transparent,
+//                unfocusedIndicatorColor = Color.Transparent,
+//                placeholderColor = Color.LightGray
+//            ),
             textStyle = TextStyle(fontSize = 20.sp, color = BorderGreen, fontWeight = FontWeight.SemiBold),
             placeholder = { Text("Add notes", style = MaterialTheme.typography.titleLarge.copy(color = PlaceholderGray, fontSize = 20.sp, fontWeight = FontWeight.W500)) },
             modifier = Modifier
@@ -172,6 +185,12 @@ fun ExpenseScreen(navController: NavController) {
             Text("9:49 PM", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 20.sp, fontWeight = FontWeight.W500))
         }
     }
+    SelectAccountTypeModal(
+        showSheet = showSheet,
+        sheetState = sheetState,
+        onDismissRequest = { showSheet = false },
+        navController = navController
+    )
 }
 
 @Composable
@@ -200,6 +219,41 @@ fun CalculatorRow(buttons: List<String>) {
                         fontWeight = FontWeight.W500
                     )
                 )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SelectAccountTypeModal(
+    showSheet: Boolean,
+    sheetState: SheetState,
+    onDismissRequest: () -> Unit,
+    navController: NavController
+) {
+    if (showSheet) {
+        ModalBottomSheet(
+            onDismissRequest = onDismissRequest,
+            sheetState = sheetState,
+            dragHandle = null,
+            tonalElevation = 0.dp,
+            scrimColor = Color.Black.copy(alpha = 0.5f),
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    "Select an account",
+                    style = MaterialTheme.typography.headlineSmall.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 22.sp,)
+                )
+                AccountTypeTag(icon = R.drawable.card_icon, title = "Card", amount = "3,410.00", navigate = { navController.navigate("habit_flow") })
+                AccountTypeTag(icon = R.drawable.cash_icon, title = "Cash", amount = "2,500.00",navigate = { navController.navigate("habit_flow") })
+                Spacer(modifier = Modifier.height(20.dp))
+                ButtonWithIcon(title = "ADD NEW ACCOUNT", onClick = { })
             }
         }
     }

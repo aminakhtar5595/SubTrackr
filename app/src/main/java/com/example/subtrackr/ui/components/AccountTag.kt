@@ -2,6 +2,7 @@ package com.example.subtrackr.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.example.subtrackr.ui.theme.BorderGreen
 
 @Composable
-fun AccountTag(title: String, icon: Int, iconDescription: String, modifier: Modifier = Modifier) {
+fun AccountTag(title: String, icon: Int, iconDescription: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -40,7 +41,8 @@ fun AccountTag(title: String, icon: Int, iconDescription: String, modifier: Modi
                     color = BorderGreen,
                     shape = RoundedCornerShape(6.dp)
                 )
-                .padding(horizontal = 12.dp),
+                .padding(horizontal = 12.dp)
+                .clickable { onClick() },
             horizontalArrangement = Arrangement.Center
         ) {
             Image(painter = painterResource(id = icon),
