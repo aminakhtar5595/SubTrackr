@@ -233,13 +233,13 @@ fun addNewCategoryDialog(dismiss: () -> Unit) {
                             color = BorderGreen,
                             shape = RoundedCornerShape(8.dp)
                         ),
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = DarkBackground,
-                        textColor = Color.Gray,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        placeholderColor = Color.LightGray
-                    ),
+//                    colors = TextFieldDefaults.textFieldColors(
+//                        containerColor = DarkBackground,
+//                        textColor = Color.Gray,
+//                        focusedIndicatorColor = Color.Transparent,
+//                        unfocusedIndicatorColor = Color.Transparent,
+//                        placeholderColor = Color.LightGray
+//                    ),
                     textStyle = TextStyle(
                         fontSize = 20.sp,
                         color = BorderGreen,

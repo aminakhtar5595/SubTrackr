@@ -62,13 +62,13 @@ fun SearchScreen() {
         TextField(
             value = searchText,
             onValueChange = { searchText = it },
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.Transparent,
-                textColor = Color.Gray,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                placeholderColor = Color.LightGray
-            ),
+//            colors = TextFieldDefaults.textFieldColors(
+//                containerColor = Color.Transparent,
+//                textColor = Color.Gray,
+//                focusedIndicatorColor = Color.Transparent,
+//                unfocusedIndicatorColor = Color.Transparent,
+//                placeholderColor = Color.LightGray
+//            ),
             textStyle = TextStyle(
                 fontSize = 20.sp, color = BorderGreen, fontWeight = FontWeight.SemiBold),
             placeholder = { Text("Search for records",
