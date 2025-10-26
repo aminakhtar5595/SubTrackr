@@ -66,6 +66,14 @@ fun ExpenseScreen(navController: NavController) {
     val scope = rememberCoroutineScope()
     var showSheet by remember { mutableStateOf(false) }
 
+    var selectAccountTitle by remember {
+        mutableStateOf("Account")
+    }
+
+    var selectedAccountIcon by remember {
+        mutableStateOf(R.drawable.expense_account)
+    }
+
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -80,7 +88,7 @@ fun ExpenseScreen(navController: NavController) {
             ActionTag(icon = Icons.Filled.Check, iconDescription = "Save Icon", title = "SAVE",
                 onClick = {
                     val expense = Expense(
-                        accountType = "cash",
+                        accountType = selectAccountTitle,
                         category = "Food",
                         note = notesText,
                         amount = amountText,
@@ -108,11 +116,11 @@ fun ExpenseScreen(navController: NavController) {
         Row (
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            AccountTag(title= "Account", icon= R.drawable.expense_account, iconDescription= "Expense Account", modifier = Modifier.weight(1f), onClick = {
+            AccountTag(label= "Account", title= selectAccountTitle, icon= selectedAccountIcon, iconDescription= "Expense Account", modifier = Modifier.weight(1f), onClick = {
                 showSheet = true
                 scope.launch { sheetState.show() }
             })
-            AccountTag(title= "Category", icon= R.drawable.expense_category, iconDescription= "Expense Category", modifier = Modifier.weight(1f), onClick = {})
+            AccountTag(label= "Category", title= "Category", icon= R.drawable.expense_category, iconDescription= "Expense Category", modifier = Modifier.weight(1f), onClick = {})
         }
 
         Spacer(modifier = Modifier.height(6.dp))
@@ -189,7 +197,11 @@ fun ExpenseScreen(navController: NavController) {
         showSheet = showSheet,
         sheetState = sheetState,
         onDismissRequest = { showSheet = false },
-        navController = navController
+        onAccountSelected = { title, icon ->
+            selectAccountTitle = title
+            selectedAccountIcon = icon
+            showSheet = false
+        }
     )
 }
 
@@ -205,7 +217,14 @@ fun CalculatorRow(buttons: List<String>) {
                     .weight(1f)
                     .height(60.dp)
                     .background(
-                        color = if (text in listOf("+", "-", "x", "/", "=")) BorderGreen else Color.White,
+                        color = if (text in listOf(
+                                "+",
+                                "-",
+                                "x",
+                                "/",
+                                "="
+                            )
+                        ) BorderGreen else Color.White,
                         shape = RoundedCornerShape(8.dp)
                     )
                     .border(2.dp, BorderGreen, RoundedCornerShape(8.dp)),
@@ -230,7 +249,7 @@ fun SelectAccountTypeModal(
     showSheet: Boolean,
     sheetState: SheetState,
     onDismissRequest: () -> Unit,
-    navController: NavController
+    onAccountSelected: (String, Int) -> Unit
 ) {
     if (showSheet) {
         ModalBottomSheet(
@@ -250,8 +269,8 @@ fun SelectAccountTypeModal(
                     "Select an account",
                     style = MaterialTheme.typography.headlineSmall.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 22.sp,)
                 )
-                AccountTypeTag(icon = R.drawable.card_icon, title = "Card", amount = "3,410.00", navigate = { navController.navigate("habit_flow") })
-                AccountTypeTag(icon = R.drawable.cash_icon, title = "Cash", amount = "2,500.00",navigate = { navController.navigate("habit_flow") })
+                AccountTypeTag(icon = R.drawable.card_icon, title = "Card", amount = "3,410.00", navigate = { onAccountSelected("Card", R.drawable.card_icon) })
+                AccountTypeTag(icon = R.drawable.cash_icon, title = "Cash", amount = "2,500.00",navigate = { onAccountSelected("Cash", R.drawable.cash_icon) })
                 Spacer(modifier = Modifier.height(20.dp))
                 ButtonWithIcon(title = "ADD NEW ACCOUNT", onClick = { })
             }

@@ -24,12 +24,12 @@ import androidx.compose.ui.unit.sp
 import com.example.subtrackr.ui.theme.BorderGreen
 
 @Composable
-fun AccountTag(title: String, icon: Int, iconDescription: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun AccountTag(label: String, title: String, icon: Int, iconDescription: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        Text(title, style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500))
+        Text(label, style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500))
         Spacer(modifier = Modifier.height(5.dp))
         Row (
             verticalAlignment = Alignment.CenterVertically,
