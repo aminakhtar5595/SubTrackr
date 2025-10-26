@@ -29,6 +29,6 @@ val expenseData = CategoryType(
         Category("Car", R.drawable.car_icon),
         Category("Clothing", R.drawable.clothing_icon),
         Category("Education", R.drawable.education_icon),
-        Category("Electronics", R.drawable.electronics_icon),
+        Category("Electronics", R.drawable.electronics_icon)
     )
 )
