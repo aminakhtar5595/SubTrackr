@@ -79,6 +79,14 @@ fun ExpenseScreen(navController: NavController) {
         mutableStateOf(R.drawable.expense_account)
     }
 
+    var selectCategoryTitle by remember {
+        mutableStateOf("Category")
+    }
+
+    var selectedCategoryIcon by remember {
+        mutableStateOf(R.drawable.expense_category)
+    }
+
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -94,7 +102,7 @@ fun ExpenseScreen(navController: NavController) {
                 onClick = {
                     val expense = Expense(
                         accountType = selectAccountTitle,
-                        category = "Food",
+                        category = selectCategoryTitle,
                         note = notesText,
                         amount = amountText,
                         date = date,
@@ -125,7 +133,7 @@ fun ExpenseScreen(navController: NavController) {
                 showSheet = true
                 scope.launch { sheetState.show() }
             })
-            AccountTag(label= "Category", title= "Category", icon= R.drawable.expense_category, iconDescription= "Expense Category", modifier = Modifier.weight(1f), onClick = {
+            AccountTag(label= "Category", title= selectCategoryTitle, icon= selectedCategoryIcon, iconDescription= "Expense Category", modifier = Modifier.weight(1f), onClick = {
                 showCategorySheet = true
                 scope.launch { sheetState.show() }
             })
@@ -216,10 +224,10 @@ fun ExpenseScreen(navController: NavController) {
         showSheet = showCategorySheet,
         sheetState = sheetState,
         onDismissRequest = { showCategorySheet = false },
-        onAccountSelected = { title, icon ->
-            selectAccountTitle = title
-            selectedAccountIcon = icon
-            showSheet = false
+        onCategorySelected = { title, icon ->
+            selectCategoryTitle = title
+            selectedCategoryIcon = icon
+            showCategorySheet = false
         }
     )
 }
@@ -288,8 +296,8 @@ fun SelectAccountTypeModal(
                     "Select an account",
                     style = MaterialTheme.typography.headlineSmall.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 22.sp,)
                 )
-                AccountTypeTag(icon = R.drawable.card_icon, title = "Card", amount = "3,410.00", navigate = { onAccountSelected("Card", R.drawable.card_icon) })
-                AccountTypeTag(icon = R.drawable.cash_icon, title = "Cash", amount = "2,500.00",navigate = { onAccountSelected("Cash", R.drawable.cash_icon) })
+                AccountTypeTag(icon = R.drawable.card_icon, title = "Card", amount = "3,410.00", onPress = { onAccountSelected("Card", R.drawable.card_icon) })
+                AccountTypeTag(icon = R.drawable.cash_icon, title = "Cash", amount = "2,500.00",onPress = { onAccountSelected("Cash", R.drawable.cash_icon) })
                 Spacer(modifier = Modifier.height(20.dp))
                 ButtonWithIcon(title = "ADD NEW ACCOUNT", onClick = { })
             }
@@ -303,7 +311,7 @@ fun SelectCategoryModal(
     showSheet: Boolean,
     sheetState: SheetState,
     onDismissRequest: () -> Unit,
-    onAccountSelected: (String, Int) -> Unit
+    onCategorySelected: (String, Int) -> Unit
 ) {
     val categoryData = expenseData.categories
     if (showSheet) {
@@ -329,7 +337,7 @@ fun SelectCategoryModal(
                 ) {
                     items(categoryData.size) { index ->
                         val category = categoryData[index]
-                        CategoryTag(icon = category.icon, title = category.name)
+                        CategoryTag(icon = category.icon, title = category.name, onPress = { onCategorySelected(category.name, category.icon) })
                     }
                 }
                 Spacer(modifier = Modifier.height(20.dp))
