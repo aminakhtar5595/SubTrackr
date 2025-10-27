@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -65,6 +66,7 @@ fun ExpenseScreen(navController: NavController) {
     var amountText by remember { mutableStateOf("0") }
     var date by remember { mutableStateOf("") }
     var time by remember { mutableStateOf("") }
+    var expression by remember { mutableStateOf("") }
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
@@ -85,6 +87,21 @@ fun ExpenseScreen(navController: NavController) {
 
     var selectedCategoryIcon by remember {
         mutableStateOf(R.drawable.expense_category)
+    }
+
+    // Function to handle calculator clicks
+    fun onButtonClick(value: String) {
+        when (value) {
+            "=" -> {
+                val result = calculateAmount(expression)
+                amountText = if (result.isNaN()) "Error" else result.toString()
+                expression = result.toString()
+            }
+            else -> {
+                expression += value
+                amountText = expression
+            }
+        }
     }
 
     Column (
@@ -185,19 +202,23 @@ fun ExpenseScreen(navController: NavController) {
                     painter = painterResource(id = R.drawable.expense_cancel),
                     contentDescription = "Cancel Icon",
                     modifier = Modifier.size(30.dp)
+                    .clickable {
+                        expression = ""
+                        amountText = "0"
+                    }
                 )
             }
         }
         Spacer(modifier = Modifier.height(4.dp))
 
         // Sixth section - Calculator
-        CalculatorRow(listOf("+", "7", "8", "9"))
+        CalculatorRow(listOf("+", "7", "8", "9")) { onButtonClick(it) }
         Spacer(modifier = Modifier.height(4.dp))
-        CalculatorRow(listOf("-", "4", "5", "6"))
+        CalculatorRow(listOf("-", "4", "5", "6")) { onButtonClick(it) }
         Spacer(modifier = Modifier.height(4.dp))
-        CalculatorRow(listOf("x", "1", "2", "3"))
+        CalculatorRow(listOf("x", "1", "2", "3")) { onButtonClick(it) }
         Spacer(modifier = Modifier.height(4.dp))
-        CalculatorRow(listOf("/", "0", ".", "="))
+        CalculatorRow(listOf("/", "0", ".", "=")) { onButtonClick(it) }
 
         Row (
             horizontalArrangement = Arrangement.SpaceAround,
@@ -233,7 +254,7 @@ fun ExpenseScreen(navController: NavController) {
 }
 
 @Composable
-fun CalculatorRow(buttons: List<String>) {
+fun CalculatorRow(buttons: List<String>, onButtonClick: (String) -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -254,7 +275,8 @@ fun CalculatorRow(buttons: List<String>) {
                         ) BorderGreen else Color.White,
                         shape = RoundedCornerShape(8.dp)
                     )
-                    .border(2.dp, BorderGreen, RoundedCornerShape(8.dp)),
+                    .border(2.dp, BorderGreen, RoundedCornerShape(8.dp))
+                    .clickable { onButtonClick(text) },
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -344,5 +366,82 @@ fun SelectCategoryModal(
                 ButtonWithIcon(onClick = { })
             }
         }
+    }
+}
+
+fun calculateAmount(expression: String): Double {
+    return try {
+        val cleanExpr = expression.replace("x", "*")
+
+        val parser = object {
+            var pos = -1
+            var ch = 0
+
+            fun nextChar() {
+                ch = if (++pos < cleanExpr.length) cleanExpr[pos].code else -1
+            }
+
+            fun eat(charToEat: Int): Boolean {
+                while (ch == ' '.code) nextChar()
+                if (ch == charToEat) {
+                    nextChar()
+                    return true
+                }
+                return false
+            }
+
+            fun parse(): Double {
+                nextChar()
+                val x = parseExpression()
+                if (pos < cleanExpr.length) throw RuntimeException("Unexpected: ${ch.toChar()}")
+                return x
+            }
+
+            fun parseExpression(): Double {
+                var x = parseTerm()
+                while (true) {
+                    when {
+                        eat('+'.code) -> x += parseTerm()
+                        eat('-'.code) -> x -= parseTerm()
+                        else -> return x
+                    }
+                }
+            }
+
+            fun parseTerm(): Double {
+                var x = parseFactor()
+                while (true) {
+                    when {
+                        eat('*'.code) -> x *= parseFactor()
+                        eat('/'.code) -> x /= parseFactor()
+                        else -> return x
+                    }
+                }
+            }
+
+            fun parseFactor(): Double {
+                if (eat('+'.code)) return parseFactor()
+                if (eat('-'.code)) return -parseFactor()
+
+                var x: Double
+                val startPos = pos
+                when {
+                    eat('('.code) -> {
+                        x = parseExpression()
+                        eat(')'.code)
+                    }
+                    ch in '0'.code..'9'.code || ch == '.'.code -> {
+                        while (ch in '0'.code..'9'.code || ch == '.'.code) nextChar()
+                        x = cleanExpr.substring(startPos, pos).toDouble()
+                    }
+                    else -> throw RuntimeException("Unexpected: ${ch.toChar()}")
+                }
+                return x
+            }
+        }
+
+        parser.parse()
+    } catch (e: Exception) {
+        Double.NaN
     }
 }
