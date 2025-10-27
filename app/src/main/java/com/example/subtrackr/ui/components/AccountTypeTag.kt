@@ -21,8 +21,8 @@ import com.example.subtrackr.ui.theme.PrimaryGreen
 import com.example.subtrackr.ui.theme.PrimaryRed
 
 @Composable
-fun AccountTypeTag(icon: Int, title: String, amount: String, navigate: () -> Unit) {
-    Column(modifier = Modifier.fillMaxWidth().clickable { navigate() }) {
+fun AccountTypeTag(icon: Int, title: String, amount: String, onPress: () -> Unit) {
+    Column(modifier = Modifier.fillMaxWidth().clickable { onPress() }) {
         Spacer(modifier = Modifier.height(20.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
