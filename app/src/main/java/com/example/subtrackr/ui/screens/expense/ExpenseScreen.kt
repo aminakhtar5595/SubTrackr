@@ -70,7 +70,6 @@ import java.util.TimeZone
 fun ExpenseScreen(navController: NavController) {
     var notesText by remember { mutableStateOf("") }
     var amountText by remember { mutableStateOf("0") }
-    var time by remember { mutableStateOf("") }
     var expression by remember { mutableStateOf("") }
 
     val dateFormat = remember { SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()) }
@@ -134,7 +133,7 @@ fun ExpenseScreen(navController: NavController) {
                         note = notesText,
                         amount = amountText,
                         date = selectedDate,
-                        time = time
+                        time = SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date())
                     )
                     Log.d("ExpenseScreen", "Add expense: $expense" )
                 })
@@ -233,10 +232,11 @@ fun ExpenseScreen(navController: NavController) {
 
         Row (
             horizontalArrangement = Arrangement.SpaceAround,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+            .clickable { showDatePicker = true },
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(selectedDate, style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 20.sp, fontWeight = FontWeight.W500), modifier = Modifier.clickable { showDatePicker = true })
+            Text(selectedDate, style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 20.sp, fontWeight = FontWeight.W500))
             Text("|", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold))
             Text(SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date()), style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 20.sp, fontWeight = FontWeight.W500))
         }
