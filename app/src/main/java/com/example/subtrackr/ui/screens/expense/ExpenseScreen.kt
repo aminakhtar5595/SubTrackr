@@ -21,6 +21,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -51,22 +53,31 @@ import com.example.subtrackr.ui.theme.PrimaryGreen
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import com.example.subtrackr.data.datasource.expenseData
 import com.example.subtrackr.ui.components.AccountTypeTag
 import com.example.subtrackr.ui.components.ButtonWithIcon
 import com.example.subtrackr.ui.components.CategoryTag
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpenseScreen(navController: NavController) {
-    var accountType by remember { mutableStateOf("") }
-    var category by remember { mutableStateOf("") }
     var notesText by remember { mutableStateOf("") }
     var amountText by remember { mutableStateOf("0") }
-    var date by remember { mutableStateOf("") }
     var time by remember { mutableStateOf("") }
     var expression by remember { mutableStateOf("") }
+
+    val dateFormat = remember { SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()) }
+
+    val currentDate = remember { dateFormat.format(Date()) }
+    var selectedDate by remember { mutableStateOf(currentDate) }
+    var showDatePicker by remember { mutableStateOf(false) }
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
@@ -122,7 +133,7 @@ fun ExpenseScreen(navController: NavController) {
                         category = selectCategoryTitle,
                         note = notesText,
                         amount = amountText,
-                        date = date,
+                        date = selectedDate,
                         time = time
                     )
                     Log.d("ExpenseScreen", "Add expense: $expense" )
@@ -225,9 +236,9 @@ fun ExpenseScreen(navController: NavController) {
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("June 20, 2025", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 20.sp, fontWeight = FontWeight.W500))
+            Text(selectedDate, style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 20.sp, fontWeight = FontWeight.W500), modifier = Modifier.clickable { showDatePicker = true })
             Text("|", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold))
-            Text("9:49 PM", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 20.sp, fontWeight = FontWeight.W500))
+            Text(SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date()), style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 20.sp, fontWeight = FontWeight.W500))
         }
     }
     SelectAccountTypeModal(
@@ -251,6 +262,47 @@ fun ExpenseScreen(navController: NavController) {
             showCategorySheet = false
         }
     )
+
+    if (showDatePicker) {
+        val initialMillis = remember(selectedDate) {
+            try {
+                dateFormat.parse(selectedDate)?.time
+            } catch (e: Exception) {
+                null
+            }
+        }
+        val timeZoneOffset = TimeZone.getDefault().getOffset(Date().time)
+        val adjustedMillis = initialMillis?.plus(timeZoneOffset)
+
+        val datePickerState = rememberDatePickerState(
+            initialSelectedDateMillis = adjustedMillis
+        )
+
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    val millis = datePickerState.selectedDateMillis
+                    if (millis != null) {
+                        // Re-adjust UTC back to local timezone
+                        val localMillis = millis - timeZoneOffset
+                        selectedDate = dateFormat.format(Date(localMillis))
+                    }
+                    showDatePicker = false
+                }) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) {
+                    Text("Cancel")
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+
 }
 
 @Composable
