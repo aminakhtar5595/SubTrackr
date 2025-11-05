@@ -24,6 +24,7 @@ class ExpenseDataStoreManager(private val context: Context) {
         }
     }
 
+
     suspend fun getExpenseCategories(): List<Category> {
         val json = context.expenseDataStore.data.map { prefs ->
             prefs[EXPENSE_KEY] ?: ""
