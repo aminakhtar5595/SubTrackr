@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.subtrackr.data.model.Expense
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import androidx.core.content.edit
 
 object ExpenseStorage {
     private const val PREF_NAME = "expense_storage"
@@ -20,7 +21,7 @@ object ExpenseStorage {
         expenseList.add(expense)
         val updatedJson = gson.toJson(expenseList)
 
-        sharedPreferences.edit().putString(KEY_EXPENSES, updatedJson).apply()
+        sharedPreferences.edit { putString(KEY_EXPENSES, updatedJson) }
     }
 
     fun getExpenses(context: Context): List<Expense> {
@@ -32,6 +33,6 @@ object ExpenseStorage {
 
     fun clearExpenses(context: Context) {
         context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-            .edit().remove(KEY_EXPENSES).apply()
+            .edit { remove(KEY_EXPENSES) }
     }
 }

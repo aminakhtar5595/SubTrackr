@@ -55,7 +55,9 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.ui.platform.LocalContext
 import com.example.subtrackr.data.datasource.expenseData
+import com.example.subtrackr.data.local.ExpenseStorage
 import com.example.subtrackr.ui.components.AccountTypeTag
 import com.example.subtrackr.ui.components.ButtonWithIcon
 import com.example.subtrackr.ui.components.CategoryTag
@@ -71,6 +73,7 @@ fun ExpenseScreen(navController: NavController) {
     var notesText by remember { mutableStateOf("") }
     var amountText by remember { mutableStateOf("0") }
     var expression by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     val dateFormat = remember { SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()) }
 
@@ -135,7 +138,9 @@ fun ExpenseScreen(navController: NavController) {
                         date = selectedDate,
                         time = SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date())
                     )
-                    Log.d("ExpenseScreen", "Add expense: $expense" )
+                    ExpenseStorage.saveExpense(context, expense)
+                    Log.d("ExpenseScreen", "Expense Added: $expense")
+                    navController.popBackStack()
                 })
         }
 
