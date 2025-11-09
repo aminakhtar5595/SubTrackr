@@ -127,7 +127,11 @@ fun ExpenseScreen(navController: NavController) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            ActionTag(icon = Icons.Filled.Close, iconDescription = "Close Icon", title = "CANCEL", onClick = { navController.popBackStack() })
+            ActionTag(icon = Icons.Filled.Close, iconDescription = "Close Icon", title = "CANCEL",
+                onClick = {
+                    ExpenseStorage.clearExpenses(context)
+                    navController.popBackStack()
+                })
             ActionTag(icon = Icons.Filled.Check, iconDescription = "Save Icon", title = "SAVE",
                 onClick = {
                     val expense = Expense(
@@ -136,7 +140,9 @@ fun ExpenseScreen(navController: NavController) {
                         note = notesText,
                         amount = amountText,
                         date = selectedDate,
-                        time = SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date())
+                        time = SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date()),
+                        accountIcon = selectedAccountIcon,
+                        categoryIcon = selectedCategoryIcon
                     )
                     ExpenseStorage.saveExpense(context, expense)
                     Log.d("ExpenseScreen", "Expense Added: $expense")

@@ -7,5 +7,7 @@ data class Expense(
     val note: String,
     val amount: String,
     val date: String,
-    val time: String
+    val time: String,
+    val accountIcon: Int,
+    val categoryIcon: Int
 )
