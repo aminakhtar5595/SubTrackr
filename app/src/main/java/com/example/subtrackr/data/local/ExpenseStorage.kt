@@ -1,6 +1,7 @@
 package com.example.subtrackr.data.local
 
 import android.content.Context
+import android.util.Log
 import com.example.subtrackr.data.model.Expense
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -20,7 +21,6 @@ object ExpenseStorage {
 
         expenseList.add(expense)
         val updatedJson = gson.toJson(expenseList)
-
         sharedPreferences.edit { putString(KEY_EXPENSES, updatedJson) }
     }
 

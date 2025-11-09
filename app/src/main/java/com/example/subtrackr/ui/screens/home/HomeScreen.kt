@@ -1,5 +1,6 @@
 package com.example.subtrackr.ui.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,6 +45,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.subtrackr.R
+import com.example.subtrackr.data.local.ExpenseStorage
+import com.example.subtrackr.data.model.Expense
 import com.example.subtrackr.ui.components.FloatingButton
 import com.example.subtrackr.ui.components.Header
 import com.example.subtrackr.ui.theme.BackgroundRed
@@ -52,13 +56,17 @@ import com.example.subtrackr.ui.theme.LightGray
 import com.example.subtrackr.ui.theme.LightGreen
 import com.example.subtrackr.ui.theme.PrimaryGreen
 import com.example.subtrackr.ui.theme.PrimaryRed
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun HomeScreen(navController: NavController) {
     var deleteDialog by remember { mutableStateOf(false) }
     var detailsDialog by remember { mutableStateOf(false) }
     var optionsDialog by remember { mutableStateOf(false) }
-
+    val context = LocalContext.current
+    val expenses = remember { ExpenseStorage.getExpenses(context) }
+    Log.d("HomeScreen", "GET Expenses: $expenses")
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -76,69 +84,7 @@ fun HomeScreen(navController: NavController) {
             Divider(color = LightGray, thickness = 3.dp)
 
             // Second main section
-            Column(
-                modifier = Modifier.padding(20.dp).clickable { detailsDialog = true }
-            ) {
-                Text(
-                    "Jun 21, Saturday",
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        color = PrimaryGreen,
-                        fontWeight = FontWeight.W500
-                    )
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                Divider(color = PrimaryGreen, thickness = 1.dp)
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Row {
-                        Image(
-                            painter = painterResource(id = R.drawable.telephone_icon),
-                            contentDescription = "Expense Icon"
-                        )
-
-                        Column(
-                            modifier = Modifier.padding(start = 10.dp)
-                        ) {
-                            Text(
-                                "Telephone",
-                                style = MaterialTheme.typography.titleSmall.copy(
-                                    color = PrimaryGreen,
-                                    fontWeight = FontWeight.W500,
-                                    fontSize = 20.sp
-                                )
-                            )
-                            Spacer(modifier = Modifier.height(5.dp))
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.cash_icon),
-                                    contentDescription = "Cash Icon",
-                                    modifier = Modifier.size(30.dp)
-                                )
-                                Text(
-                                    "Cash",
-                                    style = MaterialTheme.typography.titleMedium.copy(color = LightGreen),
-                                    modifier = Modifier.padding(start = 5.dp)
-                                )
-                            }
-                        }
-                    }
-                    Text(
-                        "-$5,910.00",
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            color = PrimaryRed,
-                            fontWeight = FontWeight.W500,
-                            fontSize = 20.sp
-                        )
-                    )
-                }
-            }
+            ExpenseSection(expenses)
         }
 
         // Align FAB to bottom-end
@@ -154,13 +100,13 @@ fun HomeScreen(navController: NavController) {
     }
 
     if (deleteDialog) {
-        deleteDialogView(
+        DeleteDialogView(
             dismiss = { deleteDialog = false },
         )
     }
 
     if (detailsDialog) {
-        detailsDialogView(
+        DetailsDialogView(
             dismiss = { detailsDialog = false },
             delete = {
                 detailsDialog = false
@@ -174,14 +120,14 @@ fun HomeScreen(navController: NavController) {
     }
 
     if (optionsDialog) {
-        optionsDialogView(
+        OptionsDialogView(
             dismiss = { optionsDialog = false },
         )
     }
 }
 
 @Composable
-fun deleteDialogView(dismiss: () -> Unit) {
+fun DeleteDialogView(dismiss: () -> Unit) {
     Dialog(onDismissRequest = { dismiss() }) {
         Column(
             modifier = Modifier
@@ -233,7 +179,7 @@ fun deleteDialogView(dismiss: () -> Unit) {
 }
 
 @Composable
-fun detailsDialogView(dismiss: () -> Unit, delete: () -> Unit, edit: () -> Unit) {
+fun DetailsDialogView(dismiss: () -> Unit, delete: () -> Unit, edit: () -> Unit) {
     Dialog(onDismissRequest = { dismiss() }) {
         Column(
             modifier = Modifier
@@ -315,7 +261,7 @@ fun InfoTag(title: String, icon: Int, label: String) {
 }
 
 @Composable
-fun optionsDialogView(dismiss: () -> Unit) {
+fun OptionsDialogView(dismiss: () -> Unit) {
     Dialog(onDismissRequest = { dismiss() }) {
         Column(
             modifier = Modifier
@@ -383,5 +329,115 @@ fun optionsDialogView(dismiss: () -> Unit) {
                 Text("With Carry over enabled, monthly surplus will be added to the next month.", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontSize = 18.sp, fontWeight = FontWeight.W500), modifier = Modifier.padding(start = 15.dp))
             }
         }
+    }
+}
+
+@Composable
+fun ExpenseSection(expenses: List<Expense>) {
+    if (expenses.isEmpty()) {
+        Text(
+            "No expenses found",
+            style = MaterialTheme.typography.bodyLarge.copy(
+                color = PrimaryGreen,
+                fontWeight = FontWeight.W500
+            ),
+            modifier = Modifier.padding(20.dp)
+        )
+        return
+    }
+
+    val groupedExpenses = expenses.groupBy { it.date }
+
+    Column(modifier = Modifier.padding(vertical = 20.dp)) {
+        groupedExpenses.forEach { (date, expenseList) ->
+            val formattedDate = try {
+                val inputFormat = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
+                val parsedDate = inputFormat.parse(date)
+                val displayFormat = SimpleDateFormat("MMM d, EEEE", Locale.getDefault())
+                displayFormat.format(parsedDate!!)
+            } catch (e: Exception) {
+                date
+            }
+
+            Text(
+                formattedDate,
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    color = PrimaryGreen,
+                    fontWeight = FontWeight.W500
+                ), modifier = Modifier.padding(horizontal = 15.dp)
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+            Divider(color = PrimaryGreen, thickness = 1.dp)
+            Spacer(modifier = Modifier.height(10.dp))
+
+            expenseList.forEach { expense ->
+                ExpenseDetails(
+                    categoryIcon = expense.categoryIcon,
+                    categoryName = expense.category,
+                    accountIcon = expense.accountIcon,
+                    accountType = expense.accountType,
+                    expenseAmount = expense.amount
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Divider(color = LightGray, thickness = 1.dp)
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+        }
+    }
+}
+
+
+@Composable
+fun ExpenseDetails(categoryIcon: Int, categoryName: String, accountIcon: Int, accountType: String, expenseAmount: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row {
+            Image(
+                painter = painterResource(id = categoryIcon),
+                contentDescription = "Expense Icon"
+            )
+
+            Column(
+                modifier = Modifier.padding(start = 10.dp)
+            ) {
+                Text(
+                    categoryName,
+                    style = MaterialTheme.typography.titleSmall.copy(
+                        color = PrimaryGreen,
+                        fontWeight = FontWeight.W500,
+                        fontSize = 20.sp
+                    )
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = accountIcon),
+                        contentDescription = "$accountType Icon",
+                        modifier = Modifier.size(30.dp)
+                    )
+                    Text(
+                        accountType,
+                        style = MaterialTheme.typography.titleMedium.copy(color = LightGreen),
+                        modifier = Modifier.padding(start = 5.dp)
+                    )
+                }
+            }
+        }
+        Text(
+            "-$$expenseAmount",
+            style = MaterialTheme.typography.titleMedium.copy(
+                color = PrimaryRed,
+                fontWeight = FontWeight.W500,
+                fontSize = 20.sp
+            )
+        )
     }
 }
