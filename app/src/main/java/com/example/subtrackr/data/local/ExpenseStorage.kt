@@ -35,4 +35,16 @@ object ExpenseStorage {
         context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
             .edit { remove(KEY_EXPENSES) }
     }
+
+    fun deleteExpense(context: Context, expenseToDelete: Expense) {
+        val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val existingJson = sharedPreferences.getString(KEY_EXPENSES, "[]")
+        val type = object : TypeToken<MutableList<Expense>>() {}.type
+        val expenseList: MutableList<Expense> = gson.fromJson(existingJson, type)
+        expenseList.removeIf { it.date == expenseToDelete.date && it.time == expenseToDelete.time && it.amount == expenseToDelete.amount }
+
+        val updatedJson = gson.toJson(expenseList)
+        sharedPreferences.edit { putString(KEY_EXPENSES, updatedJson) }
+    }
+
 }

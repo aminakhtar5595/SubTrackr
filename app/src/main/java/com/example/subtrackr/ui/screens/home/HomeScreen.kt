@@ -19,7 +19,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
@@ -65,8 +67,10 @@ fun HomeScreen(navController: NavController) {
     var detailsDialog by remember { mutableStateOf(false) }
     var optionsDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    val expenses = remember { ExpenseStorage.getExpenses(context) }
+    var expenses by remember { mutableStateOf(ExpenseStorage.getExpenses(context)
+        .sortedByDescending { it.date }) }
     Log.d("HomeScreen", "GET Expenses: $expenses")
+    var selectedExpense by remember { mutableStateOf<Expense?>(null) }
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -84,7 +88,12 @@ fun HomeScreen(navController: NavController) {
             Divider(color = LightGray, thickness = 3.dp)
 
             // Second main section
-            ExpenseSection(expenses)
+            ExpenseSection(
+                expenses,
+                onExpenseClick = { expense ->
+                selectedExpense = expense
+                detailsDialog = true
+            })
         }
 
         // Align FAB to bottom-end
@@ -99,14 +108,21 @@ fun HomeScreen(navController: NavController) {
         }
     }
 
-    if (deleteDialog) {
+    if (deleteDialog && selectedExpense != null) {
         DeleteDialogView(
             dismiss = { deleteDialog = false },
+            onConfirmDelete = {
+                ExpenseStorage.deleteExpense(context, selectedExpense!!)
+                expenses = ExpenseStorage.getExpenses(context)
+                    .sortedByDescending { it.date }
+                deleteDialog = false
+            }
         )
     }
 
-    if (detailsDialog) {
+    if (detailsDialog && selectedExpense != null) {
         DetailsDialogView(
+            expense = selectedExpense!!,
             dismiss = { detailsDialog = false },
             delete = {
                 detailsDialog = false
@@ -119,6 +135,7 @@ fun HomeScreen(navController: NavController) {
         )
     }
 
+
     if (optionsDialog) {
         OptionsDialogView(
             dismiss = { optionsDialog = false },
@@ -127,7 +144,7 @@ fun HomeScreen(navController: NavController) {
 }
 
 @Composable
-fun DeleteDialogView(dismiss: () -> Unit) {
+fun DeleteDialogView(dismiss: () -> Unit, onConfirmDelete: () -> Unit) {
     Dialog(onDismissRequest = { dismiss() }) {
         Column(
             modifier = Modifier
@@ -163,7 +180,7 @@ fun DeleteDialogView(dismiss: () -> Unit) {
                 }
 
                 Button(
-                    onClick = { dismiss() },
+                    onClick = { onConfirmDelete() },
                     shape = RoundedCornerShape(5.dp),
                     contentPadding = PaddingValues(horizontal = 40.dp, vertical = 12.dp),
                     border = BorderStroke(2.dp, PrimaryGreen),
@@ -179,7 +196,7 @@ fun DeleteDialogView(dismiss: () -> Unit) {
 }
 
 @Composable
-fun DetailsDialogView(dismiss: () -> Unit, delete: () -> Unit, edit: () -> Unit) {
+fun DetailsDialogView(expense: Expense, dismiss: () -> Unit, delete: () -> Unit, edit: () -> Unit) {
     Dialog(onDismissRequest = { dismiss() }) {
         Column(
             modifier = Modifier
@@ -218,11 +235,11 @@ fun DetailsDialogView(dismiss: () -> Unit, delete: () -> Unit, edit: () -> Unit)
 
                 Text("EXPENSE",style = MaterialTheme.typography.titleLarge.copy(color = Color.White, fontSize = 18.sp))
                 Spacer(modifier = Modifier.height(15.dp))
-                Text("-$1,100.00",style = MaterialTheme.typography.headlineLarge.copy(color = Color.White))
+                Text("-$${expense.amount}",style = MaterialTheme.typography.headlineLarge.copy(color = Color.White))
             }
 
             Spacer(modifier = Modifier.height(20.dp))
-            Text("Jun 21, 2025 9:35 AM",style = MaterialTheme.typography.bodyMedium.copy(color = Color.White, textAlign = TextAlign.Right), modifier = Modifier.fillMaxWidth())
+            Text("${expense.date} ${expense.time}",style = MaterialTheme.typography.bodyMedium.copy(color = Color.White, textAlign = TextAlign.Right), modifier = Modifier.fillMaxWidth())
             }
 
             Column (
@@ -231,12 +248,11 @@ fun DetailsDialogView(dismiss: () -> Unit, delete: () -> Unit, edit: () -> Unit)
                     .fillMaxWidth()
                     .padding(top = 10.dp, bottom = 30.dp, start = 20.dp, end = 20.dp)
             ) {
-
-                InfoTag(title = "Account", icon = R.drawable.card_icon, label = "Card")
+                InfoTag(title = "Account", icon = expense.accountIcon, label = expense.accountType)
                 Spacer(modifier = Modifier.height(10.dp))
-                InfoTag(title = "Category", icon = R.drawable.bills_icon, label = "Bills")
+                InfoTag(title = "Category", icon = expense.categoryIcon, label = expense.category)
                 Spacer(modifier = Modifier.height(20.dp))
-                Text("Electricity Bill",style = MaterialTheme.typography.titleLarge.copy(color = LightGreen, textAlign = TextAlign.Center), modifier = Modifier.fillMaxWidth())
+                Text(expense.note, style = MaterialTheme.typography.titleLarge.copy(color = LightGreen, textAlign = TextAlign.Center), modifier = Modifier.fillMaxWidth())
             }
         }
     }
@@ -333,7 +349,8 @@ fun OptionsDialogView(dismiss: () -> Unit) {
 }
 
 @Composable
-fun ExpenseSection(expenses: List<Expense>) {
+fun ExpenseSection(expenses: List<Expense>, onExpenseClick: (Expense) -> Unit) {
+    val scrollState = rememberScrollState()
     if (expenses.isEmpty()) {
         Text(
             "No expenses found",
@@ -348,7 +365,7 @@ fun ExpenseSection(expenses: List<Expense>) {
 
     val groupedExpenses = expenses.groupBy { it.date }
 
-    Column(modifier = Modifier.padding(vertical = 20.dp)) {
+    Column(modifier = Modifier.padding(vertical = 20.dp).verticalScroll(scrollState)) {
         groupedExpenses.forEach { (date, expenseList) ->
             val formattedDate = try {
                 val inputFormat = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
@@ -377,7 +394,8 @@ fun ExpenseSection(expenses: List<Expense>) {
                     categoryName = expense.category,
                     accountIcon = expense.accountIcon,
                     accountType = expense.accountType,
-                    expenseAmount = expense.amount
+                    expenseAmount = expense.amount,
+                    onClick = { onExpenseClick(expense) }
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Divider(color = LightGray, thickness = 1.dp)
@@ -391,9 +409,10 @@ fun ExpenseSection(expenses: List<Expense>) {
 
 
 @Composable
-fun ExpenseDetails(categoryIcon: Int, categoryName: String, accountIcon: Int, accountType: String, expenseAmount: String) {
+fun ExpenseDetails(categoryIcon: Int, categoryName: String, accountIcon: Int, accountType: String, expenseAmount: String, onClick: () -> Unit) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp)
+        .clickable { onClick() },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
