@@ -93,7 +93,7 @@ fun AnalysisScreen(navController: NavController) {
                 .padding(20.dp)
         ) {
             FloatingButton(onClick = {
-                navController.navigate("expense")
+                navController.navigate("expense_screen?expenseId=null")
             })
         }
     }

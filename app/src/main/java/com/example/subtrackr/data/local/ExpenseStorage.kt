@@ -47,4 +47,18 @@ object ExpenseStorage {
         sharedPreferences.edit { putString(KEY_EXPENSES, updatedJson) }
     }
 
+    fun updateExpense(context: Context, updatedExpense: Expense) {
+        val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val existingJson = sharedPreferences.getString(KEY_EXPENSES, "[]")
+        val type = object : TypeToken<MutableList<Expense>>() {}.type
+        val expenseList: MutableList<Expense> = gson.fromJson(existingJson, type)
+
+        val index = expenseList.indexOfFirst { it.id == updatedExpense.id }
+        if (index != -1) {
+            expenseList[index] = updatedExpense
+            val updatedJson = gson.toJson(expenseList)
+            sharedPreferences.edit().putString(KEY_EXPENSES, updatedJson).apply()
+        }
+    }
+
 }

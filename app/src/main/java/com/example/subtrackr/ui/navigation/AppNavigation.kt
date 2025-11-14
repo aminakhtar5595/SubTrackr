@@ -4,8 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.subtrackr.ui.screens.analysis.AnalysisScreen
 import com.example.subtrackr.ui.screens.categories.CategoriesScreen
 import com.example.subtrackr.ui.screens.categories.CategoryDetailScreen
@@ -21,7 +23,19 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
         composable("splash") { SplashScreen() }
         composable("home") { HomeScreen(navController) }
         composable("search") { SearchScreen() }
-        composable("expense") { ExpenseScreen(navController) }
+        composable(
+            route = "expense_screen?expenseId={expenseId}",
+            arguments = listOf(
+                navArgument("expenseId") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) {
+            val expenseId = it.arguments?.getString("expenseId")
+            ExpenseScreen(navController, expenseId)
+        }
         composable("category") { CategoriesScreen(navController) }
         composable("analysis") { AnalysisScreen(navController) }
         composable("category_details") { CategoryDetailScreen(navController) }
