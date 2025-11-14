@@ -103,7 +103,7 @@ fun HomeScreen(navController: NavController) {
                 .padding(20.dp)
         ) {
             FloatingButton(onClick = {
-                 navController.navigate("expense")
+                navController.navigate("expense_screen?expenseId=null")
             })
         }
     }
@@ -130,10 +130,11 @@ fun HomeScreen(navController: NavController) {
             },
             edit = {
                 detailsDialog = false
-                navController.navigate("expense")
+                navController.navigate("expense_screen?expenseId=${selectedExpense!!.id}")
             }
         )
     }
+
 
 
     if (optionsDialog) {

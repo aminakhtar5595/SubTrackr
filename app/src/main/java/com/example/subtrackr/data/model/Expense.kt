@@ -1,6 +1,9 @@
 package com.example.subtrackr.data.model
 
+import java.util.UUID
+
 data class Expense(
+    val id: String = UUID.randomUUID().toString(),
     val paymentType: String = "expense",
     val accountType: String,
     val category: String,

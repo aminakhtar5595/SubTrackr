@@ -69,38 +69,30 @@ import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExpenseScreen(navController: NavController) {
-    var notesText by remember { mutableStateOf("") }
-    var amountText by remember { mutableStateOf("0") }
-    var expression by remember { mutableStateOf("") }
+fun ExpenseScreen(navController: NavController, expenseId: String?) {
     val context = LocalContext.current
-
+    val existingExpense = remember {
+        expenseId?.let {
+            ExpenseStorage.getExpenses(context).find { exp -> exp.id == it }
+        }
+    }
     val dateFormat = remember { SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()) }
-
     val currentDate = remember { dateFormat.format(Date()) }
-    var selectedDate by remember { mutableStateOf(currentDate) }
+    var notesText by remember { mutableStateOf(existingExpense?.note ?: "") }
+    var amountText by remember { mutableStateOf(existingExpense?.amount ?: "0") }
+    var selectAccountTitle by remember { mutableStateOf(existingExpense?.accountType ?: "Account") }
+    var selectCategoryTitle by remember { mutableStateOf(existingExpense?.category ?: "Category") }
+    var selectedDate by remember { mutableStateOf(existingExpense?.date ?: currentDate) }
+    var selectedAccountIcon by remember { mutableStateOf(existingExpense?.accountIcon ?: R.drawable.expense_account) }
+    var selectedCategoryIcon by remember { mutableStateOf(existingExpense?.categoryIcon ?: R.drawable.expense_category) }
+    var expression by remember { mutableStateOf("") }
+
     var showDatePicker by remember { mutableStateOf(false) }
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     var showSheet by remember { mutableStateOf(false) }
     var showCategorySheet by remember { mutableStateOf(false) }
-
-    var selectAccountTitle by remember {
-        mutableStateOf("Account")
-    }
-
-    var selectedAccountIcon by remember {
-        mutableStateOf(R.drawable.expense_account)
-    }
-
-    var selectCategoryTitle by remember {
-        mutableStateOf("Category")
-    }
-
-    var selectedCategoryIcon by remember {
-        mutableStateOf(R.drawable.expense_category)
-    }
 
     // Function to handle calculator clicks
     fun onButtonClick(value: String) {
@@ -144,8 +136,14 @@ fun ExpenseScreen(navController: NavController) {
                         accountIcon = selectedAccountIcon,
                         categoryIcon = selectedCategoryIcon
                     )
-                    ExpenseStorage.saveExpense(context, expense)
-                    Log.d("ExpenseScreen", "Expense Added: $expense")
+                    if (expenseId != null && existingExpense != null) {
+                        val updatedExpense = expense.copy(id = existingExpense.id)
+                        ExpenseStorage.updateExpense(context, updatedExpense)
+                        Log.d("ExpenseScreen", "Expense Updated: $updatedExpense")
+                    } else {
+                        ExpenseStorage.saveExpense(context, expense)
+                        Log.d("ExpenseScreen", "Expense Added: $expense")
+                    }
                     navController.popBackStack()
                 })
         }
