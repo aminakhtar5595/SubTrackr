@@ -1,5 +1,6 @@
 package com.example.subtrackr.ui.screens.analysis
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -20,17 +23,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.subtrackr.R
+import com.example.subtrackr.data.local.ExpenseDataStoreManager
+import com.example.subtrackr.data.local.ExpenseStorage
+import com.example.subtrackr.data.model.Category
 import com.example.subtrackr.ui.components.FloatingButton
 import com.example.subtrackr.ui.components.Header
 import com.example.subtrackr.ui.theme.LightBackground
@@ -41,6 +48,16 @@ import com.example.subtrackr.ui.theme.PrimaryRed
 @Composable
 fun AnalysisScreen(navController: NavController) {
     var progress by remember { mutableStateOf(0.2f) }
+    val context = LocalContext.current
+    val expenseManager = remember { ExpenseDataStoreManager(context) }
+    val expenseCategories by produceState(initialValue = emptyList<Category>()) {
+        value = expenseManager.getExpenseCategories()
+    }
+    val scrollState = rememberScrollState()
+    var expenses by remember { mutableStateOf(ExpenseStorage.getExpenses(context)) }
+
+    Log.d("AnalyticsScreen", "Categories: $expenseCategories")
+    Log.d("AnalyticsScreen", "Expenses: $expenses")
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -49,7 +66,8 @@ fun AnalysisScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(vertical = 20.dp),
+                .padding(vertical = 20.dp)
+                .verticalScroll(scrollState),
         ) {
 
             // First main section
@@ -58,31 +76,9 @@ fun AnalysisScreen(navController: NavController) {
             Divider(color = LightGray, thickness = 3.dp)
 
             // Second main section
-            ExpenseItem(
-                iconRes = R.drawable.bills_icon,
-                label = "Bills",
-                amount = "-$3,800.00",
-                progress = 0.7f,
-                percentage = "64.30%",
-                onClick = { navController.navigate("category_details") }
-            )
-
-            ExpenseItem(
-                iconRes = R.drawable.telephone_icon,
-                label = "Telephone",
-                amount = "-$810.00",
-                progress = 0.2f,
-                percentage = "13.71%",
-                onClick = { navController.navigate("category_details") }
-            )
-
-            ExpenseItem(
-                iconRes = R.drawable.food_icon,
-                label = "Food",
-                amount = "-$900.00",
-                progress = 0.3f,
-                percentage = "15.54%",
-                onClick = { navController.navigate("category_details") }
+            CategoryAmountSection(
+                categories = expenseCategories,
+                navController = navController
             )
         }
 
@@ -96,6 +92,20 @@ fun AnalysisScreen(navController: NavController) {
                 navController.navigate("expense_screen?expenseId=null")
             })
         }
+    }
+}
+
+@Composable
+fun CategoryAmountSection(categories: List<Category>, navController: NavController) {
+    categories.forEach { category ->
+        ExpenseItem(
+            iconRes = category.icon,
+            label = category.name,
+            amount = "-$900.00",
+            progress = 0.3f,
+            percentage = "15.54%",
+            onClick = { navController.navigate("category_details") }
+        )
     }
 }
 
