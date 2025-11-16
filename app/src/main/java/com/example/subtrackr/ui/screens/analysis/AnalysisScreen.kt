@@ -1,6 +1,5 @@
 package com.example.subtrackr.ui.screens.analysis
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,6 +37,7 @@ import androidx.navigation.NavController
 import com.example.subtrackr.data.local.ExpenseDataStoreManager
 import com.example.subtrackr.data.local.ExpenseStorage
 import com.example.subtrackr.data.model.Category
+import com.example.subtrackr.data.model.CategoryAnalytics
 import com.example.subtrackr.ui.components.FloatingButton
 import com.example.subtrackr.ui.components.Header
 import com.example.subtrackr.ui.theme.LightBackground
@@ -47,17 +47,39 @@ import com.example.subtrackr.ui.theme.PrimaryRed
 
 @Composable
 fun AnalysisScreen(navController: NavController) {
-    var progress by remember { mutableStateOf(0.2f) }
     val context = LocalContext.current
     val expenseManager = remember { ExpenseDataStoreManager(context) }
+
     val expenseCategories by produceState(initialValue = emptyList<Category>()) {
         value = expenseManager.getExpenseCategories()
     }
     val scrollState = rememberScrollState()
     var expenses by remember { mutableStateOf(ExpenseStorage.getExpenses(context)) }
 
-    Log.d("AnalyticsScreen", "Categories: $expenseCategories")
-    Log.d("AnalyticsScreen", "Expenses: $expenses")
+    // Calculate total spent
+    val totalAmount = expenses.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }
+
+    // Group expenses by category and calculate totals
+    val categoryTotals: Map<String, Double> =
+        expenses.groupBy { it.category }
+            .mapValues { entry ->
+                entry.value.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }
+            }
+
+    // Convert to list sorted by highest spending
+    val categoryBreakdown = expenseCategories.map { cat ->
+        val totalForCategory = categoryTotals[cat.name] ?: 0.0
+        val percentage = if (totalAmount == 0.0) 0.0 else (totalForCategory / totalAmount) * 100
+        val progress = if (totalAmount == 0.0) 0f else (totalForCategory / totalAmount).toFloat()
+
+        CategoryAnalytics(
+            icon = cat.icon,
+            name = cat.name,
+            total = totalForCategory,
+            progress = progress,
+            percentage = percentage
+        )
+    }
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -77,7 +99,7 @@ fun AnalysisScreen(navController: NavController) {
 
             // Second main section
             CategoryAmountSection(
-                categories = expenseCategories,
+                breakdown = categoryBreakdown,
                 navController = navController
             )
         }
@@ -96,16 +118,21 @@ fun AnalysisScreen(navController: NavController) {
 }
 
 @Composable
-fun CategoryAmountSection(categories: List<Category>, navController: NavController) {
-    categories.forEach { category ->
-        ExpenseItem(
-            iconRes = category.icon,
-            label = category.name,
-            amount = "-$900.00",
-            progress = 0.3f,
-            percentage = "15.54%",
-            onClick = { navController.navigate("category_details") }
-        )
+fun CategoryAmountSection(
+    breakdown: List<CategoryAnalytics>,
+    navController: NavController
+) {
+    breakdown.forEach { item ->
+        if (item.total > 0) {
+            ExpenseItem(
+                iconRes = item.icon,
+                label = item.name,
+                amount = "-${String.format("%.2f", item.total)}",
+                progress = item.progress,
+                percentage = "${String.format("%.2f", item.percentage)}%",
+                onClick = { navController.navigate("category_details") }
+            )
+        }
     }
 }
 
