@@ -98,6 +98,17 @@ fun AnalysisScreen(navController: NavController) {
             Divider(color = LightGray, thickness = 3.dp)
 
             // Second main section
+            if (expenses.isEmpty()) {
+                Text(
+                    "No analysis for this month",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = PrimaryGreen,
+                        fontWeight = FontWeight.W500
+                    ),
+                    modifier = Modifier.padding(20.dp)
+                )
+                return
+            }
             CategoryAmountSection(
                 breakdown = categoryBreakdown,
                 navController = navController
