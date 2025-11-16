@@ -17,6 +17,7 @@ class IncomeDataStoreManager(private val context: Context) {
     private val gson = Gson()
     private val INCOME_KEY = stringPreferencesKey("income_categories")
 
+    // Save income categories
     suspend fun saveIncomeCategories(categories: List<Category>) {
         val json = gson.toJson(categories)
         context.incomeDataStore.edit { prefs ->
@@ -24,6 +25,7 @@ class IncomeDataStoreManager(private val context: Context) {
         }
     }
 
+    // Get income categories
     suspend fun getIncomeCategories(): List<Category> {
         val json = context.incomeDataStore.data.map { prefs ->
             prefs[INCOME_KEY] ?: ""
