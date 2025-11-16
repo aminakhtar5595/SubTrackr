@@ -1,7 +1,6 @@
 package com.example.subtrackr.data.local
 
 import android.content.Context
-import android.util.Log
 import com.example.subtrackr.data.model.Expense
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -13,6 +12,7 @@ object ExpenseStorage {
 
     private val gson = Gson()
 
+    // Save expenses
     fun saveExpense(context: Context, expense: Expense) {
         val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val existingJson = sharedPreferences.getString(KEY_EXPENSES, "[]")
@@ -24,6 +24,7 @@ object ExpenseStorage {
         sharedPreferences.edit { putString(KEY_EXPENSES, updatedJson) }
     }
 
+    // Get all expenses
     fun getExpenses(context: Context): List<Expense> {
         val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val json = sharedPreferences.getString(KEY_EXPENSES, "[]")
@@ -31,11 +32,13 @@ object ExpenseStorage {
         return gson.fromJson(json, type)
     }
 
+    // Clear all expenses
     fun clearExpenses(context: Context) {
         context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
             .edit { remove(KEY_EXPENSES) }
     }
 
+    // Delete expenses
     fun deleteExpense(context: Context, expenseToDelete: Expense) {
         val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val existingJson = sharedPreferences.getString(KEY_EXPENSES, "[]")
@@ -47,6 +50,7 @@ object ExpenseStorage {
         sharedPreferences.edit { putString(KEY_EXPENSES, updatedJson) }
     }
 
+    // Update expenses
     fun updateExpense(context: Context, updatedExpense: Expense) {
         val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val existingJson = sharedPreferences.getString(KEY_EXPENSES, "[]")
@@ -60,5 +64,4 @@ object ExpenseStorage {
             sharedPreferences.edit().putString(KEY_EXPENSES, updatedJson).apply()
         }
     }
-
 }

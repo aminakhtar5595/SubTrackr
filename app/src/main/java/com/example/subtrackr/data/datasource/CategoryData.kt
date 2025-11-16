@@ -5,6 +5,7 @@ import com.example.subtrackr.data.model.Category
 import com.example.subtrackr.data.model.CategoryType
 import com.example.subtrackr.R
 
+// Income categories hard coded data
 val incomeData = CategoryType(
     name = "Income categories",
     type = "income",
@@ -14,6 +15,7 @@ val incomeData = CategoryType(
     )
 )
 
+// Expense categories hard coded data
 val expenseData = CategoryType(
     name = "Expense categories",
     type = "expense",

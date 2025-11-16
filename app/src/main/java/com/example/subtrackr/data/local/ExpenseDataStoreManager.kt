@@ -17,6 +17,7 @@ class ExpenseDataStoreManager(private val context: Context) {
     private val gson = Gson()
     private val EXPENSE_KEY = stringPreferencesKey("expense_categories")
 
+    // Save expense categories
     suspend fun saveExpenseCategories(categories: List<Category>) {
         val json = gson.toJson(categories)
         context.expenseDataStore.edit { prefs ->
@@ -24,7 +25,7 @@ class ExpenseDataStoreManager(private val context: Context) {
         }
     }
 
-
+    // Get expense categories
     suspend fun getExpenseCategories(): List<Category> {
         val json = context.expenseDataStore.data.map { prefs ->
             prefs[EXPENSE_KEY] ?: ""
