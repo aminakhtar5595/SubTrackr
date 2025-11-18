@@ -121,7 +121,7 @@ fun ExpenseScreen(navController: NavController, expenseId: String?) {
         ) {
             ActionTag(icon = Icons.Filled.Close, iconDescription = "Close Icon", title = "CANCEL",
                 onClick = {
-                    ExpenseStorage.clearExpenses(context)
+//                    ExpenseStorage.clearExpenses(context)
                     navController.popBackStack()
                 })
             ActionTag(icon = Icons.Filled.Check, iconDescription = "Save Icon", title = "SAVE",

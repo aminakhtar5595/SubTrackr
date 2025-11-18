@@ -1,5 +1,6 @@
 package com.example.subtrackr.ui.screens.analysis
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -81,6 +82,8 @@ fun AnalysisScreen(navController: NavController) {
         )
     }
 
+    Log.d("AnalysisScreen", "expenses: $expenses")
+
     Box(modifier = Modifier
         .fillMaxSize()
         .background(color = LightBackground)) {
@@ -134,6 +137,7 @@ fun CategoryAmountSection(
     navController: NavController
 ) {
     breakdown.forEach { item ->
+        Log.d("AnalysisScreen", "item: $item")
         if (item.total > 0) {
             ExpenseItem(
                 iconRes = item.icon,
@@ -141,7 +145,10 @@ fun CategoryAmountSection(
                 amount = "-${String.format("%.2f", item.total)}",
                 progress = item.progress,
                 percentage = "${String.format("%.2f", item.percentage)}%",
-                onClick = { navController.navigate("category_details") }
+                onClick = {
+                    navController.navigate("category_details?categoryName=${item.name}")
+                }
+
             )
         }
     }

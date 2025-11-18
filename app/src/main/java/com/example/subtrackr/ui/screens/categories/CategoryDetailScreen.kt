@@ -1,4 +1,5 @@
 package com.example.subtrackr.ui.screens.categories
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,12 +29,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.subtrackr.R
+import com.example.subtrackr.data.local.ExpenseStorage
 import com.example.subtrackr.ui.theme.BorderGreen
 import com.example.subtrackr.ui.theme.DarkBackground
 import com.example.subtrackr.ui.theme.LightBackground
@@ -42,8 +44,15 @@ import com.example.subtrackr.ui.theme.PrimaryGreen
 import com.example.subtrackr.ui.theme.PrimaryRed
 
 @Composable
-fun CategoryDetailScreen(navController: NavController) {
+fun CategoryDetailScreen(navController: NavController, categoryName: String) {
     var noDetails by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    var expenses by remember { mutableStateOf(ExpenseStorage.getExpenses(context)) }
+
+    val filteredExpenses = remember(expenses, categoryName) {
+        expenses.filter { it.category == categoryName }
+    }
+
     Column (
         modifier = Modifier
             .background(color = LightBackground)
@@ -59,7 +68,9 @@ fun CategoryDetailScreen(navController: NavController) {
             Icon(
                 imageVector = Icons.Outlined.Clear,
                 contentDescription = "Cross Icon",
-                modifier = Modifier.size(30.dp).clickable { navController.popBackStack() },
+                modifier = Modifier
+                    .size(30.dp)
+                    .clickable { navController.popBackStack() },
                 tint = PrimaryGreen,
             )
 
@@ -78,12 +89,12 @@ fun CategoryDetailScreen(navController: NavController) {
                 horizontalArrangement = Arrangement.spacedBy(15.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.food_icon),
-                    contentDescription = "Food Category Icon",
+                    painter = painterResource(id = filteredExpenses[0].categoryIcon),
+                    contentDescription = "$categoryName Icon",
                 )
 
                 Column {
-                    Text("Food", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500), modifier = Modifier.padding(bottom = 5.dp))
+                    Text(categoryName, style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500), modifier = Modifier.padding(bottom = 5.dp))
                     Text("Expense category", style = MaterialTheme.typography.titleMedium.copy(color = BorderGreen))
                 }
             }
@@ -122,7 +133,7 @@ fun CategoryDetailScreen(navController: NavController) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Total 7 records in this category", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 20.sp), modifier = Modifier
+                    Text("Total ${filteredExpenses.size} records in this category", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 20.sp), modifier = Modifier
                         .weight(1f)
                         .padding(end = 15.dp))
 
@@ -141,11 +152,15 @@ fun CategoryDetailScreen(navController: NavController) {
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
-                Text("July, 2025", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 18.sp), modifier = Modifier.padding(bottom = 10.dp))
+                Text(filteredExpenses[0].date, style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 18.sp), modifier = Modifier.padding(bottom = 10.dp))
                 Divider(color = PrimaryGreen, thickness = 1.dp)
                 Spacer(modifier = Modifier.height(10.dp))
-                repeat(5) {
-                    ExpenseInfo()
+                filteredExpenses.forEach { item ->
+                    ExpenseInfo(
+                        time = item.time,
+                        accountType = item.accountType,
+                        amount = item.amount,
+                    )
                 }
             }
         }
@@ -153,19 +168,20 @@ fun CategoryDetailScreen(navController: NavController) {
 }
 
 @Composable
-fun ExpenseInfo() {
+fun ExpenseInfo(time: String, accountType: String, amount: String) {
     Row (
-//        verticalAlignment = Alignment.Bottom,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth().padding(bottom = 15.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 15.dp)
     ) {
         Row (
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text("● Jul 05 10:14 AM", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontWeight = FontWeight.W500, fontSize = 20.sp), modifier = Modifier.padding(end = 10.dp))
-            Text("Cash", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.SemiBold, fontSize = 20.sp))
+            Text("● $time", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontWeight = FontWeight.W500, fontSize = 20.sp), modifier = Modifier.padding(end = 10.dp))
+            Text(accountType, style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.SemiBold, fontSize = 20.sp))
         }
-        Text("-$60.00", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryRed, fontWeight = FontWeight.W500, fontSize = 20.sp))
+        Text("-$$amount", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryRed, fontWeight = FontWeight.W500, fontSize = 20.sp))
     }
 }
