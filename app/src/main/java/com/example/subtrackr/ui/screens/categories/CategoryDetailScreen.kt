@@ -42,16 +42,20 @@ import com.example.subtrackr.ui.theme.LightBackground
 import com.example.subtrackr.ui.theme.LightGray
 import com.example.subtrackr.ui.theme.PrimaryGreen
 import com.example.subtrackr.ui.theme.PrimaryRed
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun CategoryDetailScreen(navController: NavController, categoryName: String) {
     var noDetails by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    var expenses by remember { mutableStateOf(ExpenseStorage.getExpenses(context)) }
+    var expenses by remember { mutableStateOf(ExpenseStorage.getExpenses(context).sortedByDescending { it.date }) }
 
     val filteredExpenses = remember(expenses, categoryName) {
         expenses.filter { it.category == categoryName }
     }
+
+    val groupedExpenses = filteredExpenses.groupBy { it.date }
 
     Column (
         modifier = Modifier
@@ -152,15 +156,26 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String) {
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
-                Text(filteredExpenses[0].date, style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 18.sp), modifier = Modifier.padding(bottom = 10.dp))
-                Divider(color = PrimaryGreen, thickness = 1.dp)
-                Spacer(modifier = Modifier.height(10.dp))
-                filteredExpenses.forEach { item ->
-                    ExpenseInfo(
-                        time = item.time,
-                        accountType = item.accountType,
-                        amount = item.amount,
-                    )
+                groupedExpenses.forEach { (date, expenseList) ->
+                    val formattedDate = try {
+                        val inputFormat = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
+                        val parsedDate = inputFormat.parse(date)
+                        val displayFormat = SimpleDateFormat("MMM d, EEEE", Locale.getDefault())
+                        displayFormat.format(parsedDate!!)
+                    } catch (e: Exception) {
+                        date
+                    }
+
+                    Text(formattedDate, style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 18.sp), modifier = Modifier.padding(bottom = 10.dp))
+                    Divider(color = PrimaryGreen, thickness = 1.dp)
+                    Spacer(modifier = Modifier.height(10.dp))
+                    expenseList.forEach { item ->
+                        ExpenseInfo(
+                            time = item.time,
+                            accountType = item.accountType,
+                            amount = item.amount,
+                        )
+                    }
                 }
             }
         }
