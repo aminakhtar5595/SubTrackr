@@ -1,5 +1,6 @@
 package com.example.subtrackr.ui.screens.analysis
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -131,6 +132,7 @@ fun AnalysisScreen(navController: NavController) {
     }
 }
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun CategoryAmountSection(
     breakdown: List<CategoryAnalytics>,
@@ -146,7 +148,7 @@ fun CategoryAmountSection(
                 progress = item.progress,
                 percentage = "${String.format("%.2f", item.percentage)}%",
                 onClick = {
-                    navController.navigate("category_details?categoryName=${item.name}")
+                    navController.navigate("category_details?categoryName=${item.name}&source=analysis")
                 }
 
             )

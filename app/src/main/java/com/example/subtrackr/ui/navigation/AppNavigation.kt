@@ -39,11 +39,16 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
         composable("category") { CategoriesScreen(navController) }
         composable("analysis") { AnalysisScreen(navController) }
         composable(
-            route = "category_details?categoryName={categoryName}"
-        ) { backStackEntry ->
-            val categoryName = backStackEntry.arguments?.getString("categoryName")
+            "category_details?categoryName={categoryName}&source={source}",
+            arguments = listOf(
+                navArgument("categoryName") { type = NavType.StringType; nullable = true },
+                navArgument("source") { type = NavType.StringType; defaultValue = "category" }
+            )
+        ) {
+            val categoryName = it.arguments?.getString("categoryName")
+            val source = it.arguments?.getString("source")
             if (categoryName != null) {
-                CategoryDetailScreen(navController, categoryName)
+                CategoryDetailScreen(navController, categoryName, source)
             }
         }
     }

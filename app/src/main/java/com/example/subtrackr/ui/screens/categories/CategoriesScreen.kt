@@ -142,7 +142,7 @@ fun CategorySection(title: String, categories: List<Category>, navController: Na
         ExpenseCategory(
             name = category.name,
             image = category.icon,
-            onClick = { navController.navigate("category_details?categoryName=${category.name}") }
+            onClick = { navController.navigate("category_details?categoryName=${category.name}&source=category") }
         )
     }
 }

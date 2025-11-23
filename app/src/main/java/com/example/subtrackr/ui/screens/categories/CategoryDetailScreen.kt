@@ -1,5 +1,4 @@
 package com.example.subtrackr.ui.screens.categories
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -47,15 +46,29 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable
-fun CategoryDetailScreen(navController: NavController, categoryName: String) {
-    Log.d("CategoryDetailsScreen", "category: $categoryName")
+fun CategoryDetailScreen(navController: NavController, categoryName: String, source: String?) {
     val context = LocalContext.current
     var expenses by remember { mutableStateOf(ExpenseStorage.getExpenses(context).sortedByDescending { it.date }) }
 
     val filteredExpenses = remember(expenses, categoryName) {
         expenses.filter { it.category == categoryName }
     }
-    val groupedExpenses = filteredExpenses.groupBy { it.date }
+
+    val inputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+    val outputDayFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val outputMonthFormat = SimpleDateFormat("MMMM, yyyy", Locale.getDefault())
+
+    val groupedData = if (source == "analysis") {
+        filteredExpenses.groupBy { expense ->
+            val parsedDate = runCatching { inputFormat.parse(expense.date) }.getOrNull()
+            parsedDate?.let { outputDayFormat.format(it) } ?: expense.date
+        }
+    } else {
+        filteredExpenses.groupBy { expense ->
+            val parsedDate = runCatching { inputFormat.parse(expense.date) }.getOrNull()
+            parsedDate?.let { outputMonthFormat.format(it) } ?: expense.date
+        }
+    }
 
     Column (
         modifier = Modifier
@@ -155,25 +168,38 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String) {
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
-                groupedExpenses.forEach { (date, expenseList) ->
-                    val formattedDate = try {
-                        val inputFormat = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
-                        val parsedDate = inputFormat.parse(date)
-                        val displayFormat = SimpleDateFormat("MMM d, EEEE", Locale.getDefault())
-                        displayFormat.format(parsedDate!!)
-                    } catch (e: Exception) {
-                        date
-                    }
+                if (source == "analysis") {
+                    groupedData.forEach { (dateKey, list) ->
+                        val dateObj = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(dateKey)
+                        val formattedDate = SimpleDateFormat("MMMM dd, EEEE", Locale.getDefault()).format(dateObj)
 
-                    Text(formattedDate, style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 18.sp), modifier = Modifier.padding(bottom = 10.dp))
-                    Divider(color = PrimaryGreen, thickness = 1.dp)
-                    Spacer(modifier = Modifier.height(10.dp))
-                    expenseList.forEach { item ->
-                        ExpenseInfo(
-                            time = item.time,
-                            accountType = item.accountType,
-                            amount = item.amount,
-                        )
+                        Text(formattedDate, style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 18.sp), modifier = Modifier.padding(bottom = 10.dp))
+                        Divider(color = PrimaryGreen, thickness = 1.dp)
+                        Spacer(modifier = Modifier.height(10.dp))
+                        list.forEach { item ->
+                            ExpenseInfo(
+                                time = item.time,
+                                accountType = item.accountType,
+                                amount = item.amount,
+                                date = item.date,
+                                showDate = false
+                            )
+                        }
+                    }
+                } else {
+                    groupedData.forEach { (monthKey, list) ->
+                        Text(monthKey, style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 18.sp), modifier = Modifier.padding(bottom = 10.dp))
+                        Divider(color = PrimaryGreen, thickness = 1.dp)
+                        Spacer(modifier = Modifier.height(10.dp))
+                        list.forEach { item ->
+                            ExpenseInfo(
+                                time = item.time,
+                                accountType = item.accountType,
+                                amount = item.amount,
+                                date = item.date,
+                                showDate = true
+                            )
+                        }
                     }
                 }
             }
@@ -182,7 +208,7 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String) {
 }
 
 @Composable
-fun ExpenseInfo(time: String, accountType: String, amount: String) {
+fun ExpenseInfo(time: String, accountType: String, amount: String, date: String, showDate: Boolean) {
     Row (
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -193,7 +219,11 @@ fun ExpenseInfo(time: String, accountType: String, amount: String) {
         Row (
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text("● $time", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontWeight = FontWeight.W500, fontSize = 20.sp), modifier = Modifier.padding(end = 10.dp))
+            if (showDate) {
+                Text("● ${date.substringBeforeLast(",")} $time", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontWeight = FontWeight.W500, fontSize = 20.sp), modifier = Modifier.padding(end = 10.dp))
+            } else {
+                Text("● $time", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontWeight = FontWeight.W500, fontSize = 20.sp), modifier = Modifier.padding(end = 10.dp))
+            }
             Text(accountType, style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.SemiBold, fontSize = 20.sp))
         }
         Text("-$$amount", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryRed, fontWeight = FontWeight.W500, fontSize = 20.sp))
