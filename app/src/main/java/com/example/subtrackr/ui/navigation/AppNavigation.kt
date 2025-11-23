@@ -38,7 +38,14 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
         }
         composable("category") { CategoriesScreen(navController) }
         composable("analysis") { AnalysisScreen(navController) }
-        composable("category_details") { CategoryDetailScreen(navController) }
+        composable(
+            route = "category_details?categoryName={categoryName}"
+        ) { backStackEntry ->
+            val categoryName = backStackEntry.arguments?.getString("categoryName")
+            if (categoryName != null) {
+                CategoryDetailScreen(navController, categoryName)
+            }
+        }
     }
 
     LaunchedEffect(Unit) {
