@@ -141,9 +141,8 @@ fun CategorySection(title: String, categories: List<Category>, navController: Na
     categories.forEach { category ->
         ExpenseCategory(
             name = category.name,
-            image = category.icon, // you can later match by category name
-//            onClick = { navController.navigate("category_details/${category.id}") }
-            onClick = {  }
+            image = category.icon,
+            onClick = { navController.navigate("category_details?categoryName=${category.name}") }
         )
     }
 }

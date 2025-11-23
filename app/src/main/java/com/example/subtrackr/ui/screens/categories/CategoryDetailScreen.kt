@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.subtrackr.R
 import com.example.subtrackr.data.local.ExpenseStorage
 import com.example.subtrackr.ui.theme.BorderGreen
 import com.example.subtrackr.ui.theme.DarkBackground
@@ -47,14 +48,13 @@ import java.util.Locale
 
 @Composable
 fun CategoryDetailScreen(navController: NavController, categoryName: String) {
-    var noDetails by remember { mutableStateOf(false) }
+    Log.d("CategoryDetailsScreen", "category: $categoryName")
     val context = LocalContext.current
     var expenses by remember { mutableStateOf(ExpenseStorage.getExpenses(context).sortedByDescending { it.date }) }
 
     val filteredExpenses = remember(expenses, categoryName) {
         expenses.filter { it.category == categoryName }
     }
-
     val groupedExpenses = filteredExpenses.groupBy { it.date }
 
     Column (
@@ -93,10 +93,9 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String) {
                 horizontalArrangement = Arrangement.spacedBy(15.dp)
             ) {
                 Image(
-                    painter = painterResource(id = filteredExpenses[0].categoryIcon),
+                    painter = painterResource(id = if (filteredExpenses.isNotEmpty()) filteredExpenses[0].categoryIcon else R.drawable.health_icon),
                     contentDescription = "$categoryName Icon",
                 )
-
                 Column {
                     Text(categoryName, style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500), modifier = Modifier.padding(bottom = 5.dp))
                     Text("Expense category", style = MaterialTheme.typography.titleMedium.copy(color = BorderGreen))
@@ -123,7 +122,7 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            if (noDetails) {
+            if (filteredExpenses.isEmpty()) {
                 Column (
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
