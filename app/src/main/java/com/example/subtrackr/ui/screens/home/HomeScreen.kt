@@ -79,7 +79,7 @@ fun HomeScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(vertical = 20.dp),
+                .padding(top = 20.dp),
         ) {
 
             // First main section
@@ -366,7 +366,10 @@ fun ExpenseSection(expenses: List<Expense>, onExpenseClick: (Expense) -> Unit) {
 
     val groupedExpenses = expenses.groupBy { it.date }
 
-    Column(modifier = Modifier.padding(vertical = 20.dp).verticalScroll(scrollState)) {
+    Column(modifier = Modifier
+        .verticalScroll(scrollState)
+        .padding(vertical = 20.dp)
+    ) {
         groupedExpenses.forEach { (date, expenseList) ->
             val formattedDate = try {
                 val inputFormat = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
