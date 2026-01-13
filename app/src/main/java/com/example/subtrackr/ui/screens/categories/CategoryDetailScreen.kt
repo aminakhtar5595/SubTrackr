@@ -96,7 +96,6 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String, sou
 
             Column {
                 Text("Category details", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500), modifier = Modifier.padding(bottom = 5.dp))
-                // Work on this - Task 1
                 Text( if (source == "analysis") "Time selected: January 2026" else "Records: All time", style = MaterialTheme.typography.titleMedium.copy(color = BorderGreen))
             }
         }
@@ -115,7 +114,6 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String, sou
                 )
                 Column {
                     Text(categoryName, style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500), modifier = Modifier.padding(bottom = 5.dp))
-                    // Work on this - Task 2
                     Text("Expense category", style = MaterialTheme.typography.titleMedium.copy(color = BorderGreen))
                 }
             }
@@ -154,12 +152,11 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String, sou
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Work on this - Task 3
                     Text(if (source == "analysis") "January, 2026: ${filteredExpenses.size} records" else "Total ${filteredExpenses.size} records in this category", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 20.sp), modifier = Modifier
                         .weight(1f)
                         .padding(end = 15.dp))
 
-                    // Work on this - Task 4 // Commented for future work
+                    // Commented for future work
 //                    Row (
 //                        horizontalArrangement = Arrangement.spacedBy(10.dp),
 //                        verticalAlignment = Alignment.Bottom
@@ -178,7 +175,7 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String, sou
                 if (source == "analysis") {
                     groupedData.forEach { (dateKey, list) ->
                         val dateObj = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(dateKey)
-                        val formattedDate = SimpleDateFormat("MMMM dd, EEEE", Locale.getDefault()).format(dateObj)
+                        val formattedDate = SimpleDateFormat("MMM dd, EEEE", Locale.getDefault()).format(dateObj)
 
                         Text(formattedDate, style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 18.sp), modifier = Modifier.padding(bottom = 10.dp))
                         Divider(color = PrimaryGreen, thickness = 1.dp)
@@ -195,7 +192,6 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String, sou
                     }
                 } else {
                     groupedData.forEach { (monthKey, list) ->
-                        // Work on this - Task 5
                         Text(monthKey, style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 18.sp), modifier = Modifier.padding(bottom = 10.dp))
                         Divider(color = PrimaryGreen, thickness = 1.dp)
                         Spacer(modifier = Modifier.height(10.dp))
