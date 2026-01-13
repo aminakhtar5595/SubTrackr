@@ -49,6 +49,7 @@ import java.util.Locale
 @Composable
 fun CategoryDetailScreen(navController: NavController, categoryName: String, source: String?) {
     Log.d("CategoryDetailsScreen", "source: $source")
+    Log.d("CategoryDetailsScreen", "categoryName: $categoryName")
     val context = LocalContext.current
     var expenses by remember { mutableStateOf(ExpenseStorage.getExpenses(context).sortedByDescending { it.date }) }
 
@@ -158,19 +159,19 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String, sou
                         .weight(1f)
                         .padding(end = 15.dp))
 
-                    // Work on this - Task 4
-                    Row (
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        verticalAlignment = Alignment.Bottom
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.List,
-                            contentDescription = "Filter Icon",
-                            modifier = Modifier.size(25.dp),
-                            tint = BorderGreen,
-                        )
-                        Text("NEW TO OLD", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontWeight = FontWeight.W500, fontSize = 20.sp))
-                    }
+                    // Work on this - Task 4 // Commented for future work
+//                    Row (
+//                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+//                        verticalAlignment = Alignment.Bottom
+//                    ) {
+//                        Icon(
+//                            imageVector = Icons.Outlined.List,
+//                            contentDescription = "Filter Icon",
+//                            modifier = Modifier.size(25.dp),
+//                            tint = BorderGreen,
+//                        )
+//                        Text("NEW TO OLD", style = MaterialTheme.typography.titleLarge.copy(color = BorderGreen, fontWeight = FontWeight.W500, fontSize = 20.sp))
+//                    }
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
