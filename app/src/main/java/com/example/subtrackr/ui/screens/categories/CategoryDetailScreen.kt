@@ -1,4 +1,5 @@
 package com.example.subtrackr.ui.screens.categories
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -47,6 +48,7 @@ import java.util.Locale
 
 @Composable
 fun CategoryDetailScreen(navController: NavController, categoryName: String, source: String?) {
+    Log.d("CategoryDetailsScreen", "source: $source")
     val context = LocalContext.current
     var expenses by remember { mutableStateOf(ExpenseStorage.getExpenses(context).sortedByDescending { it.date }) }
 
@@ -93,7 +95,8 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String, sou
 
             Column {
                 Text("Category details", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500), modifier = Modifier.padding(bottom = 5.dp))
-                Text("Records: All time", style = MaterialTheme.typography.titleMedium.copy(color = BorderGreen))
+                // Work on this - Task 1
+                Text( if (source == "analysis") "Time selected: January 2026" else "Records: All time", style = MaterialTheme.typography.titleMedium.copy(color = BorderGreen))
             }
         }
         Divider(color = LightGray, thickness = 3.dp)
@@ -111,6 +114,7 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String, sou
                 )
                 Column {
                     Text(categoryName, style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500), modifier = Modifier.padding(bottom = 5.dp))
+                    // Work on this - Task 2
                     Text("Expense category", style = MaterialTheme.typography.titleMedium.copy(color = BorderGreen))
                 }
             }
@@ -149,10 +153,12 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String, sou
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    // Work on this - Task 3
                     Text("Total ${filteredExpenses.size} records in this category", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 20.sp), modifier = Modifier
                         .weight(1f)
                         .padding(end = 15.dp))
 
+                    // Work on this - Task 4
                     Row (
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
                         verticalAlignment = Alignment.Bottom
@@ -188,6 +194,7 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String, sou
                     }
                 } else {
                     groupedData.forEach { (monthKey, list) ->
+                        // Work on this - Task 5
                         Text(monthKey, style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 18.sp), modifier = Modifier.padding(bottom = 10.dp))
                         Divider(color = PrimaryGreen, thickness = 1.dp)
                         Spacer(modifier = Modifier.height(10.dp))
