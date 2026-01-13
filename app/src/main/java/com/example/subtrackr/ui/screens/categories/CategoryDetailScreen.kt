@@ -155,7 +155,7 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String, sou
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     // Work on this - Task 3
-                    Text("Total ${filteredExpenses.size} records in this category", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 20.sp), modifier = Modifier
+                    Text(if (source == "analysis") "January, 2026: ${filteredExpenses.size} records" else "Total ${filteredExpenses.size} records in this category", style = MaterialTheme.typography.titleLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, fontSize = 20.sp), modifier = Modifier
                         .weight(1f)
                         .padding(end = 15.dp))
 
