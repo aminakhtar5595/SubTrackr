@@ -9,6 +9,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,6 +42,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -121,12 +123,14 @@ fun CategoriesScreen(navController: NavController, context: Context = LocalConte
                 Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                ButtonWithIcon(onClick = { })
+                // Task 1 - Create add category UI
+                // Task 2 - Functionality for add category
+                ButtonWithIcon(onClick = { newCategoryDialog = true })
             }
         }
     }
     if (newCategoryDialog) {
-        addNewCategoryDialog(
+        AddNewCategoryDialog(
             dismiss = { newCategoryDialog = false },
         )
     }
@@ -178,7 +182,7 @@ fun ExpenseCategory(name: String, image: Int, onClick: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun addNewCategoryDialog(dismiss: () -> Unit) {
+fun AddNewCategoryDialog(dismiss: () -> Unit) {
     Dialog(onDismissRequest = { dismiss() }) {
         Column(
             modifier = Modifier
@@ -190,29 +194,30 @@ fun addNewCategoryDialog(dismiss: () -> Unit) {
         ) {
             Text(
                 "Add new category",
-                style = MaterialTheme.typography.headlineSmall.copy(color = PrimaryGreen, fontWeight = FontWeight.W500)
+                style = MaterialTheme.typography.headlineSmall.copy(color = PrimaryGreen, fontWeight = FontWeight.W500, textAlign = TextAlign.Center), modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(16.dp))
 
             Row {
                 Text(
                     "Type:",
-                    style = MaterialTheme.typography.titleMedium.copy(color = PrimaryGreen, fontWeight = FontWeight.W400)
+                    style = MaterialTheme.typography.titleMedium.copy(color = PrimaryGreen, fontWeight = FontWeight.W400),
+                    modifier = Modifier.padding(end = 10.dp)
                 )
 
-                Text(
-                    "Income",
-                    style = MaterialTheme.typography.titleMedium.copy(color = PrimaryGreen, fontWeight = FontWeight.W400),
-                    modifier = Modifier.padding(start = 10.dp, end = 30.dp)
-                )
+//                Text(
+//                    "Income",
+//                    style = MaterialTheme.typography.titleMedium.copy(color = PrimaryGreen, fontWeight = FontWeight.W400),
+//                    modifier = Modifier.padding(start = 10.dp, end = 30.dp)
+//                )
 
                 Text(
                     "Expense",
-                    style = MaterialTheme.typography.titleMedium.copy(color = PrimaryGreen, fontWeight = FontWeight.W400)
+                    style = MaterialTheme.typography.titleMedium.copy(color = PrimaryGreen, fontWeight = FontWeight.W500)
                 )
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Row (
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -227,20 +232,24 @@ fun addNewCategoryDialog(dismiss: () -> Unit) {
                     onValueChange = { },
                     modifier = Modifier
                         .fillMaxWidth()
+                        .height(58.dp)
                         .border(
                             width = 2.dp,
                             color = BorderGreen,
                             shape = RoundedCornerShape(8.dp)
                         ),
-//                    colors = TextFieldDefaults.textFieldColors(
-//                        containerColor = DarkBackground,
-//                        textColor = Color.Gray,
-//                        focusedIndicatorColor = Color.Transparent,
-//                        unfocusedIndicatorColor = Color.Transparent,
-//                        placeholderColor = Color.LightGray
-//                    ),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = DarkBackground,
+                        unfocusedContainerColor = DarkBackground,
+                        focusedTextColor = Color.Gray,
+                        unfocusedTextColor = Color.Gray,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedPlaceholderColor = Color.LightGray,
+                        unfocusedPlaceholderColor = Color.LightGray
+                    ),
                     textStyle = TextStyle(
-                        fontSize = 20.sp,
+                        fontSize = 18.sp,
                         color = BorderGreen,
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -249,14 +258,14 @@ fun addNewCategoryDialog(dismiss: () -> Unit) {
                             "Untitled",
                             style = MaterialTheme.typography.titleLarge.copy(
                                 color = PlaceholderGray,
-                                fontSize = 20.sp
+                                fontSize = 18.sp
                             )
                         )
                     },
                 )
-
-
             }
+
+            Spacer(modifier = Modifier.height(20.dp))
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
