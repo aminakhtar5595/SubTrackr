@@ -213,6 +213,7 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String, sou
 
 @Composable
 fun ExpenseInfo(time: String, accountType: String, amount: String, date: String, showDate: Boolean) {
+    // Task 3 - Show expense details in popup in category details with functionality
     Row (
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
