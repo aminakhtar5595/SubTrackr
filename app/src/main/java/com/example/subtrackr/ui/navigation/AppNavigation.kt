@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import com.example.subtrackr.ui.screens.analysis.AnalysisScreen
 import com.example.subtrackr.ui.screens.categories.CategoriesScreen
 import com.example.subtrackr.ui.screens.categories.CategoryDetailScreen
+import com.example.subtrackr.ui.screens.categories.SelectCategoryScreen
 import com.example.subtrackr.ui.screens.expense.ExpenseScreen
 import com.example.subtrackr.ui.screens.home.HomeScreen
 import com.example.subtrackr.ui.screens.search.SearchScreen
@@ -51,11 +52,12 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
                 CategoryDetailScreen(navController, categoryName, source)
             }
         }
+        composable("select_category") { SelectCategoryScreen(navController) }
     }
 
     LaunchedEffect(Unit) {
         delay(2000)
-        navController.navigate("home") {
+        navController.navigate("select_category") {
             popUpTo("splash") { inclusive = true }
         }
     }
