@@ -82,7 +82,7 @@ fun SelectCategoryScreen(navController: NavController) {
                         modifier = Modifier.size(30.dp))
                     Text(
                         category.name,
-                        style = MaterialTheme.typography.bodyLarge.copy(color = PrimaryGreen, fontWeight = FontWeight.W500)
+                        style = MaterialTheme.typography.bodyMedium.copy(color = PrimaryGreen, fontWeight = FontWeight.W500)
                     )
                 }
             }
