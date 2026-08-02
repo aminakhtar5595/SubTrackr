@@ -109,7 +109,7 @@ fun CategoryDetailScreen(navController: NavController, categoryName: String, sou
                 horizontalArrangement = Arrangement.spacedBy(15.dp)
             ) {
                 Image(
-                    painter = painterResource(id = if (filteredExpenses.isNotEmpty()) filteredExpenses[0].categoryIcon else R.drawable.health_icon),
+                    painter = painterResource(id = if (filteredExpenses.isNotEmpty()) filteredExpenses[0].categoryIcon else R.drawable.health_logo),
                     contentDescription = "$categoryName Icon",
                 )
                 Column {

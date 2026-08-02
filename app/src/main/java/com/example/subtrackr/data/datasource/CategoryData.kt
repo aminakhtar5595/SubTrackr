@@ -10,8 +10,8 @@ val incomeData = CategoryType(
     name = "Income categories",
     type = "income",
     categories = mutableStateListOf(
-        Category("Baby", R.drawable.baby_icon),
-        Category("Bills", R.drawable.food_icon)
+        Category("Baby", R.drawable.baby_logo),
+        Category("Bills", R.drawable.food_logo)
     )
 )
 
@@ -20,17 +20,23 @@ val expenseData = CategoryType(
     name = "Expense categories",
     type = "expense",
     categories = mutableStateListOf(
-        Category("Food", R.drawable.food_icon),
-        Category("Transport", R.drawable.transportation_icon),
-        Category("Shopping", R.drawable.shopping_icon),
-        Category("Health", R.drawable.health_icon),
-        Category("Bills", R.drawable.bills_icon),
-        Category("Entertainment", R.drawable.entertainment_icon),
-        Category("Beauty", R.drawable.beauty_icon),
-        Category("Baby", R.drawable.baby_icon),
-        Category("Car", R.drawable.car_icon),
-        Category("Clothing", R.drawable.clothing_icon),
-        Category("Education", R.drawable.education_icon),
-        Category("Electronics", R.drawable.electronics_icon)
+        Category("Baby", R.drawable.baby_logo),
+        Category("Beauty", R.drawable.beauty_logo),
+        Category("Bills", R.drawable.bills_logo),
+        Category("Clothing", R.drawable.clothing_logo),
+        Category("Education", R.drawable.education_logo),
+        Category("Electronics", R.drawable.electronics_logo),
+        Category("Entertainment", R.drawable.entertainment_logo),
+        Category("Family", R.drawable.transport_logo),
+        Category("Food & Dining", R.drawable.food_logo),
+        Category("Gifts & Donations", R.drawable.transport_logo),
+        Category("Health", R.drawable.health_logo),
+        Category("Housing / Rent", R.drawable.transport_logo),
+        Category("Insurance", R.drawable.transport_logo),
+        Category("Miscellaneous", R.drawable.transport_logo),
+        Category("Shopping", R.drawable.shopping_logo),
+        Category("Tax", R.drawable.transport_logo),
+        Category("Transport", R.drawable.transport_logo),
+        Category("Travel", R.drawable.transport_logo),
     )
 )
