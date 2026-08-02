@@ -19,3 +19,5 @@ val BackgroundRed = Color(0xFFc62827)
 val BorderGreen = Color(0xFF689383)
 val PlaceholderGray = Color(0xFF9c9778)
 val DarkBackground = Color(0xFFfffcd6)
+
+val LightBlueGray = Color(0xFFF6F8FA) // The R:246, G:248, B:250 color
