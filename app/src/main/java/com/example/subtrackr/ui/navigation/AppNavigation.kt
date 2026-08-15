@@ -12,6 +12,7 @@ import com.example.subtrackr.ui.screens.analysis.AnalysisScreen
 import com.example.subtrackr.ui.screens.categories.CategoriesScreen
 import com.example.subtrackr.ui.screens.categories.CategoryDetailScreen
 import com.example.subtrackr.ui.screens.categories.SelectCategoryScreen
+import com.example.subtrackr.ui.screens.expense.ExpenseOne
 import com.example.subtrackr.ui.screens.expense.ExpenseScreen
 import com.example.subtrackr.ui.screens.home.HomeScreen
 import com.example.subtrackr.ui.screens.search.SearchScreen
@@ -21,6 +22,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifier) {
     NavHost(navController = navController, startDestination = "home", modifier = modifier) {
+        composable("expenseOne") { ExpenseOne() }
         composable("splash") { SplashScreen() }
         composable("home") { HomeScreen(navController) }
         composable("search") { SearchScreen() }
@@ -57,7 +59,7 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
 
     LaunchedEffect(Unit) {
         delay(2000)
-        navController.navigate("select_category") {
+        navController.navigate("expenseOne") {
             popUpTo("splash") { inclusive = true }
         }
     }
